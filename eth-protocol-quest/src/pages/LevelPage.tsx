@@ -7,7 +7,7 @@ export function LevelPage() {
   const { id } = useParams();
   const levelId = Number(id);
   const level = useMemo(() => levels.find((l) => l.id === levelId), [levelId]);
-  const { unlockedLevel, completeLevel, completed } = useProgressStore();
+  const { unlockedLevel, completeLevel, completed, addWrongQuestion } = useProgressStore();
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -19,6 +19,17 @@ export function LevelPage() {
 
   const onSubmit = () => {
     setSubmitted(true);
+    level.quiz.forEach((q) => {
+      if (answers[q.id] !== q.answerIndex) {
+        addWrongQuestion({
+          levelId: level.id,
+          questionId: q.id,
+          prompt: q.prompt,
+          explanation: q.explanation,
+          ts: Date.now()
+        });
+      }
+    });
     if (pass && !completed[level.id]) completeLevel(level.id, 100);
   };
 
