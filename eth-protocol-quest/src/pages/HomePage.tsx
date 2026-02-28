@@ -9,7 +9,7 @@ export function HomePage() {
   return (
     <main className="container">
       <h1>Ethereum Protocol Quest</h1>
-      <p>用闯关游戏学习以太坊协议：EL / CL / EVM / TX / Engine API / EIP / 客户端测试。</p>
+      <p>以“无限花园”风格闯关学习以太坊协议：从执行层到共识层、从 EIP 到客户端测试。</p>
       <div className="card">
         <p>当前 XP：<strong>{xp}</strong></p>
         <p>已解锁关卡：<strong>Lv{unlockedLevel}</strong></p>
