@@ -9,6 +9,20 @@ export function HomePage() {
   const { xp, unlockedLevel, chapterResults, wrongBook, badges, awardBadge, lastVisitedChapter, lastVisitedSection } = useProgressStore();
   const daily = getDailyQuests();
   const passCount = Object.values(chapterResults).filter((r) => r.passed).length;
+
+  const nextBadgeHint = (() => {
+    if (!badges.includes('First Pass')) return '再通过 1 个章节测评可解锁 First Pass';
+    if (!badges.includes('Protocol Explorer')) return `再通过 ${Math.max(0, 5 - passCount)} 个章节测评可解锁 Protocol Explorer`;
+    if (!badges.includes('Wrongbook Warrior')) return `错题累计到 10 条可解锁 Wrongbook Warrior（当前 ${wrongBook.length}）`;
+    return '你已完成主要基础徽章，下一步建议冲击核心贡献路线。';
+  })();
+
+  const smartRecommendation = (() => {
+    if (wrongBook.length >= 5) return '优先做错题回放：先处理最近 5 条错题，再进行一次章节复测。';
+    if (passCount < 3) return '建议先完成 EL/CL/EVM 三章测评，建立稳定协议基础。';
+    if (passCount < 6) return '建议推进 Engine API + Client Testing，开始进入工程实操层。';
+    return '建议进入跨客户端调试与贡献实战模块，准备首个可验证 PR。';
+  })();
   const [tasks, setTasks] = useState<Record<string, boolean>>({ read: false, quiz: false, replay: false, report: false });
   const [badgeToast, setBadgeToast] = useState<string | null>(null);
 
@@ -77,6 +91,24 @@ export function HomePage() {
       </div>
 
       <div className="card">
+        <h3>今日智能建议</h3>
+        <div className="notice">{smartRecommendation}</div>
+        <p style={{ marginTop: 10 }}><strong>下一个徽章目标：</strong>{nextBadgeHint}</p>
+      </div>
+
+      <div className="card">
+        <h3>Badge 墙</h3>
+        <div className="badge-wall">
+          {['Starter Badge', 'First Pass', 'Protocol Explorer', 'Wrongbook Warrior'].map((b) => (
+            <div key={b} className={`badge-item ${badges.includes(b) ? 'badge-on' : 'badge-off'}`}>
+              <strong>{b}</strong>
+              <small>{badges.includes(b) ? '已解锁' : '未解锁'}</small>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card">
         <h3>内容覆盖（持续扩展）</h3>
         <ul>
           <li>执行层：状态树、Gas、交易执行语义、mempool 行为</li>
@@ -97,6 +129,16 @@ export function HomePage() {
           <Link to="/curriculum#el-core" className="btn">开始首日任务</Link>
           <Link to="/progress" className="btn">查看错题与进度</Link>
         </div>
+      </div>
+
+      <div className="card">
+        <h3>学习路线速览</h3>
+        <ul>
+          <li><strong>第 1 周：</strong>EL / CL / EVM 核心打底 + 基线测评</li>
+          <li><strong>第 2 周：</strong>交易生命周期 + Engine API + EIP 流程</li>
+          <li><strong>第 3 周：</strong>客户端测试与安全专题 + 错题压缩复盘</li>
+          <li><strong>第 4 周：</strong>跨客户端调试 + 首个贡献实战任务</li>
+        </ul>
       </div>
 
       <div className="card">

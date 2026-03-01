@@ -281,6 +281,12 @@ export function CurriculumPage() {
     return '你已完成全部章节，建议进入核心贡献者路径并提交第一份可验证贡献。';
   }, [chapterResults, wrongBook.length, done, allChapters, studyMinutes]);
 
+  const avgScore = useMemo(() => {
+    const vals = Object.values(chapterResults).map((r) => Math.round((r.score / Math.max(1, r.total)) * 100));
+    if (!vals.length) return 0;
+    return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+  }, [chapterResults]);
+
   const pathBoard = useMemo(() => {
     const basicDone = ['el-core', 'cl-core', 'evm-core', 'tx-lifecycle-core'].filter((id) => done[id]).length;
     const builderDone = ['engine-api-core', 'eip-workflow-core', 'client-testing-core'].filter((id) => done[id]).length;
@@ -303,6 +309,16 @@ export function CurriculumPage() {
           style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #cde3d2' }}
         />
         <small>当前命中章节：{chapters.length}</small>
+      </section>
+
+      <section className="card">
+        <h3>学习概览快照</h3>
+        <div className="chips">
+          <span className="chip">完成章节：{completedCount}/{allChapters.length}</span>
+          <span className="chip">平均测评分：{avgScore}%</span>
+          <span className="chip">错题数：{wrongBook.length}</span>
+          <span className="chip">已获徽章：{badges.length}</span>
+        </div>
       </section>
 
       <section className="card">
@@ -430,6 +446,15 @@ export function CurriculumPage() {
           <li><strong>Wrongbook Warrior</strong>：累计错题记录达到 10 条</li>
         </ul>
         <p>已获得：{badges.length ? badges.join(' · ') : '暂无'}</p>
+      </section>
+
+      <section className="card">
+        <h3>课程使用建议（FAQ）</h3>
+        <ul>
+          <li><strong>Q:</strong> 先看章节还是先刷题？<br/><strong>A:</strong> 先读章节重点卡片，再做测评，最后错题回放。</li>
+          <li><strong>Q:</strong> 什么时候适合进入深度章节？<br/><strong>A:</strong> 基础路径完成且均分 ≥ 75% 时再进入。</li>
+          <li><strong>Q:</strong> 如何准备首个客户端贡献？<br/><strong>A:</strong> 先做测试夹具与回归模板，再选小 issue 实战。</li>
+        </ul>
       </section>
 
       <section className="card">

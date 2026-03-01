@@ -238,3 +238,32 @@ body[data-theme='dark'] .toast {
   color: #dbe8ff;
   border-color: #4f76cf;
 }
+
+
+.badge-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.badge-item {
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badge-on {
+  background: linear-gradient(140deg, #ecfff3 0%, #e8f0ff 100%);
+}
+
+.badge-off {
+  opacity: 0.65;
+  background: color-mix(in srgb, var(--card-bg) 85%, #c9d6cf);
+}
+
+body[data-theme='dark'] .badge-on {
+  background: linear-gradient(140deg, #1a2c22 0%, #1d263f 100%);
+}
