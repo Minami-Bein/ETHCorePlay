@@ -22,5 +22,7 @@ export const chapterTemplateMapping: Record<string, string[]> = {
   'upgrade-oncall-playbook-deep': ['upgrade-oncall-template', 'chaos-lite-template'],
   'ens-name-resolution-security-deep': ['ens-security-template', 'wallet-signing-check-template'],
   'mempool-private-orderflow-deep': ['orderflow-routing-template', 'chaos-lite-template'],
-  'eip4337-production-hardening-deep': ['aa-hardening-template', 'wallet-signing-check-template']
+  'eip4337-production-hardening-deep': ['aa-hardening-template', 'wallet-signing-check-template'],
+  'bridge-security-incidents-deep': ['bridge-incident-template', 'chaos-lite-template'],
+  'evm-gas-optimization-deep': ['gas-optimization-template', 'regression-test-template']
 };

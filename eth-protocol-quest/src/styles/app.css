@@ -502,3 +502,25 @@ body[data-theme='dark'] .kpi {
   filter: brightness(1.05);
   box-shadow: 0 8px 18px rgba(74, 143, 97, 0.2);
 }
+
+
+.chapter-meta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.meta-pill {
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  padding: 2px 10px;
+  font-size: 12px;
+  background: color-mix(in srgb, var(--card-bg) 86%, #e8f4ef);
+}
+
+.gradient-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--card-border) 88%, #7ea7ff), transparent);
+  margin: 10px 0 4px;
+}

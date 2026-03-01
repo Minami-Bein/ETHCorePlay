@@ -1169,4 +1169,100 @@ export const deepDiveChapters: Chapter[] = [
       }
     ]
   }
+  ,{
+    id: 'bridge-security-incidents-deep',
+    title: 'Bridge 安全与事故复盘：信任模型、验证路径与资金保护',
+    level: 'advanced',
+    objective: '建立跨链桥风险认知与事故响应能力，能从架构层降低资金损失概率。',
+    sections: [
+      {
+        heading: '细粒度小节：桥接信任模型分层',
+        points: [
+          '区分轻客户端验证、多签托管、外部验证者网络等模型。',
+          '不同模型对应不同攻击面与恢复复杂度。',
+          '架构选型应与业务风险承受能力匹配。'
+        ]
+      },
+      {
+        heading: '细粒度小节：典型事故模式与先行信号',
+        points: [
+          '验证逻辑缺陷、密钥管理问题、消息重放是高频风险。',
+          '异常出入金比、延迟飙升、对账差异是关键先行信号。',
+          '需要桥接链路级监控而非只看单链指标。'
+        ]
+      },
+      {
+        heading: '细粒度小节：应急冻结与恢复流程',
+        points: [
+          '明确冻结触发阈值与审批链路。',
+          '冻结后快速完成资产快照与影响评估。',
+          '恢复前需完成补偿策略与验证回放。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '只看 TVL 不看信任模型风险。',
+      '无冻结机制导致事故扩大。',
+      '恢复流程缺乏数据回放验证。'
+    ],
+    glossary: ['Bridge Trust Model', 'Message Replay', 'Emergency Pause', 'Cross-chain Reconciliation'],
+    practice: [
+      {
+        title: '实战：Bridge 事故响应演练',
+        steps: [
+          '定义冻结阈值与链路告警规则。',
+          '演练资产快照与影响范围评估。',
+          '输出恢复步骤与用户沟通模板。'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'evm-gas-optimization-deep',
+    title: 'EVM Gas 优化深度：存储模式、批处理与热点路径剖析',
+    level: 'advanced',
+    objective: '从执行成本视角优化合约设计，平衡可读性、安全性与 gas 效率。',
+    sections: [
+      {
+        heading: '细粒度小节：存储布局与写放大控制',
+        points: [
+          '高频写入路径应优先压缩状态变更次数。',
+          '冷热数据分层可降低长期运营成本。',
+          '批处理需防止单笔交易失败放大。'
+        ]
+      },
+      {
+        heading: '细粒度小节：热点函数剖析方法',
+        points: [
+          '基于真实调用分布识别热点函数。',
+          '结合 opcode 级分析定位高成本段。',
+          '优化前后需用同向量基准回归。'
+        ]
+      },
+      {
+        heading: '细粒度小节：优化与安全的平衡',
+        points: [
+          '过度优化可能降低可审计性。',
+          '关键逻辑优先保证正确性与边界处理。',
+          '优化改动必须配套回归测试与审计复核。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '只追求低 gas 忽略可维护性。',
+      '缺少基准导致“优化”不可验证。',
+      '安全检查被优化重构意外绕过。'
+    ],
+    glossary: ['Gas Profile', 'Storage Layout', 'Batching', 'Opcode Cost', 'Regression Benchmark'],
+    practice: [
+      {
+        title: '实战：热点路径优化实验',
+        steps: [
+          '选定一个高调用函数建立基线成本。',
+          '执行两版优化并记录收益与副作用。',
+          '输出优化建议与回归用例清单。'
+        ]
+      }
+    ]
+  }
 ];

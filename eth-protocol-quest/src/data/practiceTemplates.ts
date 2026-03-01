@@ -202,4 +202,30 @@ export const practiceTemplates: PracticeTemplate[] = [
       'EOA 紧急回退与复盘流程'
     ]
   }
+  ,{
+    id: 'bridge-incident-template',
+    category: 'ops',
+    title: 'Bridge 事故响应模板',
+    whenToUse: '桥接异常、资金风险、对账差异出现时',
+    template: [
+      '异常信号与触发阈值',
+      '冻结动作与审批链路',
+      '资产快照与影响评估',
+      '恢复前验证回放步骤',
+      '用户沟通与补偿方案'
+    ]
+  },
+  {
+    id: 'gas-optimization-template',
+    category: 'testing',
+    title: 'Gas 优化实验模板',
+    whenToUse: '进行热点路径优化与收益验证时',
+    template: [
+      '基线成本与测试向量',
+      '优化方案A/B对比',
+      '收益指标（gas/时延/失败率）',
+      '安全回归检查',
+      '上线建议与回滚条件'
+    ]
+  }
 ];

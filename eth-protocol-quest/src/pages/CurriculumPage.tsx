@@ -595,10 +595,12 @@ export function CurriculumPage() {
               <h3 style={{ margin: 0 }}>{idx + 1}. {chapter.title}</h3>
               <button className="btn btn-ghost" onClick={() => { setLastVisitedChapter(chapter.id); toggleExpand(chapter.id); }}>{expandedChapters[chapter.id] ? '收起详情' : '展开详情'}</button>
             </div>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
-              <span style={{ padding: '2px 8px', borderRadius: 999, background: done[chapter.id] ? '#daf4df' : '#f3f5f7' }}>章节状态：{done[chapter.id] ? '已完成' : '进行中'}</span>
-              <span style={{ padding: '2px 8px', borderRadius: 999, background: chapterResults[chapter.id]?.passed ? '#dbeafe' : '#fef3c7' }}>测评：{chapterResults[chapter.id] ? (chapterResults[chapter.id].passed ? '通过' : '待提高') : '未提交'}</span>
+            <div className="chapter-meta-row">
+              <span className="meta-pill">章节状态：{done[chapter.id] ? '已完成' : '进行中'}</span>
+              <span className="meta-pill">测评：{chapterResults[chapter.id] ? (chapterResults[chapter.id].passed ? '通过' : '待提高') : '未提交'}</span>
+              <span className="meta-pill">领域：{chapterDomain(chapter.id)}</span>
             </div>
+            <div className="gradient-divider" />
             <p><strong>学习目标：</strong>{chapter.objective}</p>
             <p><strong>难度：</strong>{chapter.level}</p>
             <p><strong>掌握度：</strong>{chapterMastery[chapter.id] || '初学'} · <strong>学习时长：</strong>{studyMinutes[chapter.id] || 0} 分钟</p>

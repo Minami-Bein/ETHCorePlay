@@ -283,4 +283,22 @@ export const chapterAssessments: ChapterAssessment[] = [
       { id: 'aa-prod-a3', prompt: '用户体验兜底最佳实践是？', options: ['只报失败码', '提供可解释失败原因与重试/回退路径', '隐藏错误', '强制刷新'], answerIndex: 1, explanation: '可解释与可操作是生产必需。' }
     ]
   }
+  ,{
+    chapterId: 'bridge-security-incidents-deep',
+    passThreshold: 0.7,
+    questions: [
+      { id: 'bridge-a1', prompt: '评估桥接风险时最先看什么？', options: ['页面设计', '信任模型与验证路径', '社媒热度', 'Logo'], answerIndex: 1, explanation: '信任模型决定根本攻击面。' },
+      { id: 'bridge-a2', prompt: '事故先行信号常见包括？', options: ['字体变化', '出入金异常与对账差异', '域名长度', '页面颜色'], answerIndex: 1, explanation: '链路数据异常是重要信号。' },
+      { id: 'bridge-a3', prompt: '恢复前应优先完成？', options: ['直接解冻', '资产快照与验证回放', '关闭监控', '只发公告'], answerIndex: 1, explanation: '恢复前需验证一致性。' }
+    ]
+  },
+  {
+    chapterId: 'evm-gas-optimization-deep',
+    passThreshold: 0.7,
+    questions: [
+      { id: 'gas-a1', prompt: 'gas 优化中最稳妥起点是？', options: ['随意改代码', '基于真实热点路径剖析', '只改注释', '删除测试'], answerIndex: 1, explanation: '应从热点与基线数据出发。' },
+      { id: 'gas-a2', prompt: '优化完成后应做什么？', options: ['直接上线', '同向量回归与安全复核', '关闭告警', '忽略边界'], answerIndex: 1, explanation: '优化需验证收益与安全。' },
+      { id: 'gas-a3', prompt: '过度优化风险是？', options: ['更易审计', '可读性下降与潜在安全回归', '自动增益', '无风险'], answerIndex: 1, explanation: '需平衡性能与可维护性。' }
+    ]
+  }
 ];

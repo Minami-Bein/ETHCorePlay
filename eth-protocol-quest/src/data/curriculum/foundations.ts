@@ -29,7 +29,16 @@ export const foundationChapters: Chapter[] = [
           'Gas 计量“计算与存储”资源消耗。',
           'baseFee 随区块拥堵动态调整。',
           'priorityFee 用于激励打包。',
-          'maxFee 过低会导致交易长时间 pending。'
+          'maxFee 过低会导致交易长时间 pending。',
+          '高波动期应动态调整 maxFee 与优先费策略。'
+        ]
+      },
+      {
+        heading: '细粒度小节：交易替换与 nonce 管理策略',
+        points: [
+          '同 nonce 交易可通过更高费率进行替换。',
+          '并发发送交易时应维护本地 nonce 池。',
+          '失败重发应避免 nonce 跳号造成链上阻塞。'
         ]
       }
     ],
@@ -208,6 +217,14 @@ export const foundationChapters: Chapter[] = [
           '“已打包”表示进入区块，不代表最终不可逆。',
           'CL 最终性确认后，回滚概率极低。',
           '应用侧应采用分层确认策略。'
+        ]
+      },
+      {
+        heading: '细粒度小节：应用确认层级策略',
+        points: [
+          '低风险操作可采用较低确认阈值以提升体验。',
+          '高价值操作应等待最终性或更保守阈值。',
+          '前端需明确展示“处理中/已确认/已最终确认”状态。'
         ]
       }
     ],
