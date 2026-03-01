@@ -35,6 +35,9 @@ export function CurriculumPage() {
   const [query, setQuery] = useState('');
   const [checklistState, setChecklistState] = useState<Record<string, Record<number, boolean>>>({});
   const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({});
+  const [levelFilter, setLevelFilter] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
+  const [domainFilter, setDomainFilter] = useState<'all' | 'EL' | 'CL' | 'EVM' | 'EIP' | 'Client' | 'Testing' | 'Security' | 'L2'>('all');
+  const [sortMode, setSortMode] = useState<'default' | 'difficulty' | 'progress'>('default');
   const {
     wrongBook,
     chapterResults,
@@ -74,10 +77,11 @@ export function CurriculumPage() {
   const allChapters = useMemo(() => [...foundationChapters, ...deepDiveChapters], []);
 
   const chapters = useMemo(() => {
-    const base = onlyPending ? allChapters.filter((c) => !done[c.id]) : allChapters;
+    let base = onlyPending ? allChapters.filter((c) => !done[c.id]) : allChapters;
+    if (levelFilter !== 'all') base = base.filter((c) => c.level === levelFilter);
+    if (domainFilter !== 'all') base = base.filter((c) => chapterDomain(c.id) === domainFilter);
     const q = query.trim().toLowerCase();
-    if (!q) return base;
-    return base.filter((c) => {
+    let result = !q ? base : base.filter((c) => {
       const blob = [
         c.title,
         c.objective,
@@ -87,7 +91,16 @@ export function CurriculumPage() {
       ].join(' ').toLowerCase();
       return blob.includes(q);
     });
-  }, [onlyPending, done, allChapters, query]);
+
+    if (sortMode === 'difficulty') {
+      const w = { basic: 1, beginner: 1, intermediate: 2, advanced: 3 } as const;
+      result = [...result].sort((a, b) => w[a.level as keyof typeof w] - w[b.level as keyof typeof w]);
+    }
+    if (sortMode === 'progress') {
+      result = [...result].sort((a, b) => Number(done[b.id]) - Number(done[a.id]));
+    }
+    return result;
+  }, [onlyPending, done, allChapters, query, levelFilter, domainFilter, sortMode]);
 
   const completedCount = Object.values(done).filter(Boolean).length;
   const progressPct = Math.round((completedCount / allChapters.length) * 100);
@@ -302,6 +315,17 @@ export function CurriculumPage() {
 
       <section className="card">
         <h3>章节知识点检索</h3>
+        <div className="filter-row">
+          <select value={levelFilter} onChange={(e) => setLevelFilter(e.target.value as any)}>
+            <option value="all">全部难度</option><option value="beginner">beginner</option><option value="intermediate">intermediate</option><option value="advanced">advanced</option>
+          </select>
+          <select value={domainFilter} onChange={(e) => setDomainFilter(e.target.value as any)}>
+            <option value="all">全部领域</option><option value="EL">EL</option><option value="CL">CL</option><option value="EVM">EVM</option><option value="EIP">EIP</option><option value="Client">Client</option><option value="Testing">Testing</option><option value="Security">Security</option><option value="L2">L2</option>
+          </select>
+          <select value={sortMode} onChange={(e) => setSortMode(e.target.value as any)}>
+            <option value="default">默认排序</option><option value="difficulty">按难度</option><option value="progress">按完成状态</option>
+          </select>
+        </div>
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}

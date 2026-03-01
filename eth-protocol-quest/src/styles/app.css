@@ -267,3 +267,40 @@ body[data-theme='dark'] .toast {
 body[data-theme='dark'] .badge-on {
   background: linear-gradient(140deg, #1a2c22 0%, #1d263f 100%);
 }
+
+
+.banner-glow {
+  position: relative;
+  overflow: hidden;
+}
+.banner-glow::after {
+  content: '';
+  position: absolute;
+  inset: -40% -10% auto -10%;
+  height: 220px;
+  background: radial-gradient(circle, rgba(90,118,220,.25) 0%, rgba(74,143,97,.12) 40%, transparent 70%);
+  animation: floatGlow 7s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes floatGlow {
+  0%,100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(14px) scale(1.06); }
+}
+
+.brand-tagline {
+  letter-spacing: .2px;
+  opacity: .92;
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.weekly-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}

@@ -6,9 +6,16 @@ import { getDailyQuests } from '../game/daily';
 const ONBOARDING_KEY = 'epq_onboarding_v1';
 
 export function HomePage() {
-  const { xp, unlockedLevel, chapterResults, wrongBook, badges, awardBadge, lastVisitedChapter, lastVisitedSection } = useProgressStore();
+  const { xp, unlockedLevel, chapterResults, wrongBook, badges, awardBadge, lastVisitedChapter, lastVisitedSection, studyMinutes } = useProgressStore();
   const daily = getDailyQuests();
   const passCount = Object.values(chapterResults).filter((r) => r.passed).length;
+  const totalMinutes = Object.values(studyMinutes || {}).reduce((a, b) => a + b, 0);
+  const weeklySummary = {
+    passed: passCount,
+    wrongs: wrongBook.length,
+    badges: badges.length,
+    minutes: totalMinutes
+  };
 
   const nextBadgeHint = (() => {
     if (!badges.includes('First Pass')) return '再通过 1 个章节测评可解锁 First Pass';
@@ -49,8 +56,9 @@ export function HomePage() {
   return (
     <main className="container">
       <section className="hero">
-        <div className="card">
-          <h1 className="hero-title">ETHCorePlay · 把协议学习变成可持续成长</h1>
+        <div className="card banner-glow">
+          <h1 className="hero-title">ETHCorePlay · Protocol Learning, Playfully Engineered</h1>
+          <p className="brand-tagline">Build real Ethereum protocol skills with measurable progress and contributor-ready practice.</p>
           <p>从 EL/CL/EVM 到 Engine API 与客户端测试，用章节、测评、错题回放和实战模板构建真实能力。</p>
           <div className="chips" style={{ margin: '10px 0 14px' }}>
             <span className="chip">Learning-first</span>
@@ -139,6 +147,17 @@ export function HomePage() {
           <li><strong>第 3 周：</strong>客户端测试与安全专题 + 错题压缩复盘</li>
           <li><strong>第 4 周：</strong>跨客户端调试 + 首个贡献实战任务</li>
         </ul>
+      </div>
+
+      <div className="card">
+        <h3>个人学习周报卡（自动摘要）</h3>
+        <div className="weekly-card-grid">
+          <div className="kpi"><small>本周通过测评</small><br/><b>{weeklySummary.passed}</b></div>
+          <div className="kpi"><small>当前错题池</small><br/><b>{weeklySummary.wrongs}</b></div>
+          <div className="kpi"><small>累计学习分钟</small><br/><b>{weeklySummary.minutes}</b></div>
+          <div className="kpi"><small>已获徽章数</small><br/><b>{weeklySummary.badges}</b></div>
+        </div>
+        <p style={{ marginTop: 10 }}>自动结论：{weeklySummary.passed >= 3 ? '节奏良好，可提升到中高难实战。' : '建议先稳住基础章节测评通过率，再扩展深度内容。'}</p>
       </div>
 
       <div className="card">
