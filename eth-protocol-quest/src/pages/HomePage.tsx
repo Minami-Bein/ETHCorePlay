@@ -84,9 +84,10 @@ export function HomePage() {
   return (
     <main className="container">
       <section className="hero">
-        <div className="card banner-glow">
+        <div className="card banner-glow card-hover">
           <h1 className="hero-title">ETHCorePlay · Protocol Learning, Playfully Engineered</h1>
           <p className="brand-tagline">Build real Ethereum protocol skills with measurable progress and contributor-ready practice.</p>
+          <span className="glass-ribbon">🌿 ETHCorePlay · Protocol Engineer Track</span>
           <p>从 EL/CL/EVM 到 Engine API 与客户端测试，用章节、测评、错题回放和实战模板构建真实能力。</p>
           <div className="chips" style={{ margin: '10px 0 14px' }}>
             <span className="chip">Learning-first</span>
@@ -217,7 +218,7 @@ export function HomePage() {
       </div>
 
 
-      <div className="card">
+      <div className="card card-hover">
         <h3 className="section-title">协议雷达（本周）</h3>
         <div className="grid">
           <div className="level"><strong>执行层热点</strong><small>EIP-1559 费用波动与替换交易策略</small></div>

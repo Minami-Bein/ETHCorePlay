@@ -399,3 +399,40 @@ body[data-theme='dark'] .heat-4 { background: #3ccf7c; }
   0%, 100% { box-shadow: 0 0 0 rgba(90,118,220,0); }
   50% { box-shadow: 0 0 18px rgba(90,118,220,.35); }
 }
+
+
+.glass-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--card-border) 80%, #8bb3ff);
+  background: linear-gradient(90deg, rgba(90,118,220,.10), rgba(74,143,97,.10));
+  font-size: 12px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--text-main) 85%, #4a8f61);
+}
+
+.card-hover {
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(31, 79, 53, 0.16);
+}
+
+.stat-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.stat-chip {
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  padding: 4px 10px;
+  font-size: 12px;
+  background: color-mix(in srgb, var(--card-bg) 90%, #e7f4ee);
+}

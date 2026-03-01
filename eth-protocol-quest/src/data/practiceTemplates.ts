@@ -163,4 +163,30 @@ export const practiceTemplates: PracticeTemplate[] = [
       '复盘输出与改进项跟踪'
     ]
   }
+  ,{
+    id: 'ens-security-template',
+    category: 'ops',
+    title: 'ENS 解析安全模板',
+    whenToUse: '钱包/应用展示 ENS 并执行转账或授权时',
+    template: [
+      '解析来源与更新时间',
+      '域名-地址双展示与关键字段校验',
+      '同形字符风险检测',
+      '高风险操作二次确认策略',
+      '异常解析降级与告警'
+    ]
+  },
+  {
+    id: 'orderflow-routing-template',
+    category: 'ops',
+    title: '订单流路由策略模板',
+    whenToUse: '设计公开/私有路由切换与防夹策略时',
+    template: [
+      '交易类型分层（普通/高风险/高价值）',
+      '路由选择规则与切换阈值',
+      '失败回退与重试上限',
+      '执行质量指标与告警',
+      '策略复盘与参数回调'
+    ]
+  }
 ];

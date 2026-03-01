@@ -1025,4 +1025,100 @@ export const deepDiveChapters: Chapter[] = [
       }
     ]
   }
+  ,{
+    id: 'ens-name-resolution-security-deep',
+    title: 'ENS 与名称解析安全：解析链路、缓存与劫持防护',
+    level: 'advanced',
+    objective: '掌握 ENS 解析流程中的信任边界与缓存风险，建立面向钱包/应用的防护策略。',
+    sections: [
+      {
+        heading: '细粒度小节：解析链路与信任边界',
+        points: [
+          'ENS 解析涉及注册、解析器、反向记录等多个环节。',
+          '应用应明确“链上真值”与“本地缓存”边界。',
+          '解析失败与超时需有降级与提示策略。'
+        ]
+      },
+      {
+        heading: '细粒度小节：缓存污染与过期风险',
+        points: [
+          '缓存命中提升性能，但可能引入过期与污染风险。',
+          '关键资产操作前应触发实时校验。',
+          '高风险地址可引入二次确认与白名单。'
+        ]
+      },
+      {
+        heading: '细粒度小节：前端展示与反钓鱼',
+        points: [
+          '展示 ENS 时应同步展示校验后的地址片段。',
+          '同形异义字符（homograph）需警示处理。',
+          '可疑解析结果应触发风险红标。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '把缓存结果当永久真值。',
+      '不做地址二次展示导致误转风险。',
+      '忽视同形字符攻击。'
+    ],
+    glossary: ['ENS', 'Resolver', 'Reverse Record', 'Cache Invalidation', 'Homograph Attack'],
+    practice: [
+      {
+        title: '实战：ENS 风险校验清单',
+        steps: [
+          '记录解析来源、TTL 与更新时间。',
+          '高价值操作时比对 ENS 与目标地址。',
+          '输出可疑域名告警策略。'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'mempool-private-orderflow-deep',
+    title: 'Mempool 与私有订单流：抢跑、防夹与交易路由策略',
+    level: 'advanced',
+    objective: '理解公开 mempool 与私有路由在执行质量、MEV 风险和可见性上的权衡。',
+    sections: [
+      {
+        heading: '细粒度小节：公开 mempool 风险面',
+        points: [
+          '公开广播提升可达性，但暴露交易意图。',
+          '高价值交易易受抢跑与夹子攻击。',
+          '费用策略与打包优先级强相关。'
+        ]
+      },
+      {
+        heading: '细粒度小节：私有订单流与路由选择',
+        points: [
+          '私有路由可降低部分 MEV 暴露。',
+          '需评估中继可用性、透明度与失败回退。',
+          '路由策略应根据交易类型动态切换。'
+        ]
+      },
+      {
+        heading: '细粒度小节：防夹与执行质量监控',
+        points: [
+          '关键指标：滑点、成交时延、失败率、重试次数。',
+          '应对高波动时段设置保护阈值与熔断。',
+          '执行后复盘形成策略参数回调闭环。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '默认所有交易都走公开广播。',
+      '只看成交不看滑点与失败重试成本。',
+      '路由无回退导致交易悬空。'
+    ],
+    glossary: ['Mempool', 'Private Orderflow', 'MEV Sandwich', 'Slippage', 'Routing Policy'],
+    practice: [
+      {
+        title: '实战：交易路由策略对照实验',
+        steps: [
+          '选取 3 类交易场景（小额/高滑点/高波动）。',
+          '对比公开与私有路由执行质量。',
+          '输出策略切换阈值与失败回退规则。'
+        ]
+      }
+    ]
+  }
 ];

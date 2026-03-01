@@ -256,4 +256,22 @@ export const chapterAssessments: ChapterAssessment[] = [
       { id: 'oncall-a3', prompt: '升级后复盘应产出？', options: ['只写一句总结', '时间线+动作+改进项闭环', '不记录', '只保留截图'], answerIndex: 1, explanation: '复盘要支撑后续改进执行。' }
     ]
   }
+  ,{
+    chapterId: 'ens-name-resolution-security-deep',
+    passThreshold: 0.7,
+    questions: [
+      { id: 'ens-a1', prompt: 'ENS 安全实践中最重要之一是？', options: ['只展示域名不展示地址', '关键操作前做地址二次校验', '关闭缓存', '不显示解析来源'], answerIndex: 1, explanation: '高价值操作需要地址级校验。' },
+      { id: 'ens-a2', prompt: '同形字符攻击主要利用？', options: ['字符视觉混淆', '网络带宽', 'Gas 费波动', '合约大小'], answerIndex: 0, explanation: 'homograph 是视觉混淆风险。' },
+      { id: 'ens-a3', prompt: '缓存策略更合理的是？', options: ['永久缓存', '带 TTL 与高风险实时校验', '完全禁用解析', '只看前端状态'], answerIndex: 1, explanation: '缓存要有失效与校验机制。' }
+    ]
+  },
+  {
+    chapterId: 'mempool-private-orderflow-deep',
+    passThreshold: 0.7,
+    questions: [
+      { id: 'memp-a1', prompt: '公开 mempool 最大风险之一是？', options: ['无节点可见', '交易意图暴露导致 MEV 风险', '无法打包', '不支持费用调整'], answerIndex: 1, explanation: '公开可见会增加抢跑与夹子风险。' },
+      { id: 'memp-a2', prompt: '私有路由策略应同时考虑？', options: ['可用性与回退路径', '页面主题色', '社媒热度', '文案长度'], answerIndex: 0, explanation: '可用性与回退决定真实可运营性。' },
+      { id: 'memp-a3', prompt: '执行质量评估应关注？', options: ['仅成交数量', '滑点/失败率/时延/重试成本', '仅手续费', '仅区块高度'], answerIndex: 1, explanation: '需要综合执行质量指标。' }
+    ]
+  }
 ];

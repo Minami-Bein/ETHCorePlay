@@ -19,5 +19,7 @@ export const chapterTemplateMapping: Record<string, string[]> = {
   'validator-economics-governance-deep': ['governance-eval-template', 'eip-workbench-template'],
   'wallet-security-signing-domain-deep': ['wallet-signing-check-template', 'issue-repro-template'],
   'oracle-data-integrity-deep': ['oracle-integrity-template', 'chaos-lite-template'],
-  'upgrade-oncall-playbook-deep': ['upgrade-oncall-template', 'chaos-lite-template']
+  'upgrade-oncall-playbook-deep': ['upgrade-oncall-template', 'chaos-lite-template'],
+  'ens-name-resolution-security-deep': ['ens-security-template', 'wallet-signing-check-template'],
+  'mempool-private-orderflow-deep': ['orderflow-routing-template', 'chaos-lite-template']
 };
