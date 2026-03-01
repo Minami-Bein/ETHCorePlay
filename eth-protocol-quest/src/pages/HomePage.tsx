@@ -83,7 +83,7 @@ export function HomePage() {
 
   return (
     <main className="container">
-      <section className="hero">
+      <section className="hero dashboard-grid">
         <div className="card banner-glow card-hover">
           <h1 className="hero-title">ETHCorePlay · Protocol Learning, Playfully Engineered</h1>
           <p className="brand-tagline">Build real Ethereum protocol skills with measurable progress and contributor-ready practice.</p>
@@ -128,13 +128,13 @@ export function HomePage() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card card-hover">
         <h3 className="section-title">今日智能建议</h3>
         <div className="notice">{smartRecommendation}</div>
         <p style={{ marginTop: 10 }}><strong>下一个徽章目标：</strong>{nextBadgeHint}</p>
       </div>
 
-      <div className="card">
+      <div className="card card-hover">
         <h3 className="section-title">Badge 墙</h3>
         <div className="badge-wall">
           {['Starter Badge', 'First Pass', 'Protocol Explorer', 'Wrongbook Warrior'].map((b) => (
@@ -198,7 +198,7 @@ export function HomePage() {
         </ul>
       </div>
 
-      <div className="card">
+      <div className="card card-hover">
         <h3 className="section-title">学习热力图（近14天）</h3>
         <div className="heatmap">
           {heatmap.map((v, idx) => <span key={idx} className={`heat-${v}`} title={`Day-${idx + 1} 强度 ${v}`} />)}

@@ -39,7 +39,8 @@ a { color: #4d9f74; }
 }
 
 .topbar nav { display: flex; gap: 14px; }
-.topbar nav a { text-decoration: none; font-weight: 600; }
+.topbar nav a { text-decoration: none; font-weight: 600; padding: 6px 10px; border-radius: 999px; transition: background .2s ease, color .2s ease; }
+.topbar nav a:hover { background: color-mix(in srgb, var(--card-bg) 75%, #dcefe3); }
 .brand { text-decoration: none; font-weight: 700; color: #1e5035; }
 
 .container { max-width: 980px; margin: 0 auto; padding: 20px; }
@@ -435,4 +436,63 @@ body[data-theme='dark'] .heat-4 { background: #3ccf7c; }
   padding: 4px 10px;
   font-size: 12px;
   background: color-mix(in srgb, var(--card-bg) 90%, #e7f4ee);
+}
+
+
+.container::before {
+  content: '';
+  position: fixed;
+  right: -120px;
+  top: 110px;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(90,118,220,.10) 0%, rgba(74,143,97,.06) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero .card p {
+  line-height: 1.62;
+}
+
+.kpi {
+  backdrop-filter: blur(2px);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.btn {
+  letter-spacing: .2px;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.quick-links .btn,
+.btn-ghost {
+  border: 1px solid color-mix(in srgb, var(--card-border) 70%, #8bb3ff);
+}
+
+body[data-theme='dark'] .topbar nav a:hover {
+  background: color-mix(in srgb, var(--card-bg) 65%, #26364a);
+}
+
+body[data-theme='dark'] .kpi {
+  background: color-mix(in srgb, var(--card-bg) 86%, #24352b);
+}
+
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 980px) {
+  .dashboard-grid {
+    grid-template-columns: 1.15fr .85fr;
+  }
 }
