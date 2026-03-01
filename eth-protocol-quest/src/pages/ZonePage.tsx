@@ -1,7 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { PlotCard } from '../components/ui/PlotCard';
 import { GardenLinksPanel } from '../components/ui/GardenLinksPanel';
+
+const STATE_KEY = 'epq_zone_toolbar_v1';
 
 const sample = [
   { id: 'el-core', title: 'EL 执行层核心', summary: '状态转移与 gas 机制', zone: 'Execution' as const, difficulty: 2 as const, timeMins: 35, tags: ['EVM', 'Gas'], status: 'learning' as const, progress: 0.5 },
@@ -17,6 +19,23 @@ export function ZonePage() {
   const [hasLab, setHasLab] = useState(false);
   const [sort, setSort] = useState<'recommended' | 'difficulty' | 'time'>('recommended');
   const [view, setView] = useState<'grid' | 'map-lite'>('grid');
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STATE_KEY);
+      if (!raw) return;
+      const v = JSON.parse(raw);
+      setSearch(v.search || '');
+      setDifficulty(v.difficulty || 'all');
+      setHasLab(!!v.hasLab);
+      setSort(v.sort || 'recommended');
+      setView(v.view || 'grid');
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(STATE_KEY, JSON.stringify({ search, difficulty, hasLab, sort, view }));
+  }, [search, difficulty, hasLab, sort, view]);
 
   const list = useMemo(() => {
     let r = [...sample];
