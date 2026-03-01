@@ -226,6 +226,8 @@ export function CurriculumPage() {
       .slice(0, 3);
   }, [allChapters, done]);
 
+  const weeklyPlan = useMemo(() => generateWeeklyPlan(), [allChapters, done]);
+
   const recommendation = useMemo(() => {
     const failed = Object.entries(chapterResults).filter(([, r]) => !r.passed);
     if (failed.length) {
@@ -308,6 +310,29 @@ export function CurriculumPage() {
         <p>动态提示：{pathBoard.basicDone < 4 ? '先补齐基础四章，再进入开发者路径。' : pathBoard.builderDone < 3 ? '你已完成基础路径，建议推进 Engine/EIP/客户端测试。' : pathBoard.coreDone < 5 ? '进入核心贡献者路径，优先完成测试/安全/L2DA与深层章节。' : '三条路径均达成，建议开始持续开源贡献。'}</p>
       </section>
 
+
+      <section className="card">
+        <h3>章节学习目标完成率统计</h3>
+        <ul>
+          {allChapters.map((c) => {
+            const checklist = chapterChecklists.find((x) => x.chapterId === c.id)?.items || ['阅读本章','完成测评','完成1个练习'];
+            const st = checklistState[c.id] || {};
+            const doneCount = checklist.filter((_, i) => !!st[i]).length;
+            const pct = Math.round((doneCount / checklist.length) * 100);
+            return <li key={c.id}>{c.title}：{doneCount}/{checklist.length}（{pct}%）</li>;
+          })}
+        </ul>
+      </section>
+
+      <section className="card">
+        <h3>学习提醒节奏建议（轻/中/重）</h3>
+        <ul>
+          <li><strong>轻量：</strong>每日 20 分钟（1个知识点 + 1题复习）</li>
+          <li><strong>中量：</strong>每日 45 分钟（1节内容 + 1次测评 + 错题回放）</li>
+          <li><strong>重量：</strong>每日 90 分钟（内容学习 + 实战练习 + 复盘输出）</li>
+        </ul>
+      </section>
+
       <section className="card">
         <h3>学习推荐引擎</h3>
         <p>{recommendation}</p>
@@ -325,8 +350,19 @@ export function CurriculumPage() {
 
       <section className="card">
         <h3>学习目标自动生成（周计划）</h3>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+          <button className="btn" onClick={() => {
+            const blob = new Blob([weeklyPlan.join('\n')], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'weekly-plan.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+          }}>导出周计划</button>
+        </div>
         <ol>
-          {generateWeeklyPlan().map((line) => <li key={line}>{line}</li>)}
+          {weeklyPlan.map((line) => <li key={line}>{line}</li>)}
         </ol>
       </section>
 
