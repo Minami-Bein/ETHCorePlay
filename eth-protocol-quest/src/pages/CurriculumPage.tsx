@@ -33,6 +33,7 @@ export function CurriculumPage() {
   const [retryMode, setRetryMode] = useState<Record<string, boolean>>({});
   const [query, setQuery] = useState('');
   const [checklistState, setChecklistState] = useState<Record<string, Record<number, boolean>>>({});
+  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({});
   const {
     wrongBook,
     chapterResults,
@@ -89,6 +90,7 @@ export function CurriculumPage() {
     }));
   };
 
+  const toggleExpand = (chapterId: string) => setExpandedChapters((s) => ({ ...s, [chapterId]: !s[chapterId] }));
 
   const exportChapterReport = (chapterId: string, format: 'json' | 'html' = 'json') => {
     const chapter = allChapters.find((c) => c.id === chapterId);
@@ -456,7 +458,10 @@ export function CurriculumPage() {
         const assessment = chapterAssessments.find((a) => a.chapterId === chapter.id);
         return (
           <section key={chapter.id} id={chapter.id} className="card">
-            <h3>{idx + 1}. {chapter.title}</h3>
+            <div className="accordion-header">
+              <h3 style={{ margin: 0 }}>{idx + 1}. {chapter.title}</h3>
+              <button className="btn btn-ghost" onClick={() => toggleExpand(chapter.id)}>{expandedChapters[chapter.id] ? '收起详情' : '展开详情'}</button>
+            </div>
             <div style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
               <span style={{ padding: '2px 8px', borderRadius: 999, background: done[chapter.id] ? '#daf4df' : '#f3f5f7' }}>章节状态：{done[chapter.id] ? '已完成' : '进行中'}</span>
               <span style={{ padding: '2px 8px', borderRadius: 999, background: chapterResults[chapter.id]?.passed ? '#dbeafe' : '#fef3c7' }}>测评：{chapterResults[chapter.id] ? (chapterResults[chapter.id].passed ? '通过' : '待提高') : '未提交'}</span>
@@ -472,6 +477,8 @@ export function CurriculumPage() {
               标记本章已完成
             </label>
 
+            {expandedChapters[chapter.id] && (
+              <>
             <div style={{ marginTop: 8 }}>
               <strong>前置依赖</strong>
               <div>{(chapterDependencies[chapter.id] || []).length ? (chapterDependencies[chapter.id] || []).map((d) => { const dep = allChapters.find((c) => c.id === d); return `${dep?.title || d}${done[d] ? ' ✅' : ' ⏳'}`; }).join(' / ') : '无（可直接学习）'}</div>
@@ -596,6 +603,8 @@ export function CurriculumPage() {
                 </div>
               ))}
             </div>
+              </>
+            )}
           </section>
         );
       })}

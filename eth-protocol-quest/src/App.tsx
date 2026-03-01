@@ -1,4 +1,5 @@
 import { Link, Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { HomePage } from './pages/HomePage';
 import { LevelPage } from './pages/LevelPage';
 import { MapPage } from './pages/MapPage';
@@ -7,6 +8,13 @@ import { GlossaryPage } from './pages/GlossaryPage';
 import { CurriculumPage } from './pages/CurriculumPage';
 
 export function App() {
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('epq_theme') === 'dark');
+
+  useEffect(() => {
+    document.body.dataset.theme = darkMode ? 'dark' : 'light';
+    localStorage.setItem('epq_theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
+
   return (
     <>
       <header className="topbar">
@@ -17,6 +25,7 @@ export function App() {
             <Link to="/progress">总览</Link>
             <Link to="/curriculum">课程</Link>
             <Link to="/glossary">术语</Link>
+            <button className="btn btn-ghost" onClick={() => setDarkMode((v) => !v)}>{darkMode ? '浅色' : '暗色'}</button>
           </nav>
         </div>
       </header>

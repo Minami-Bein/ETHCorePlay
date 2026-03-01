@@ -1,21 +1,32 @@
 :root {
   font-family: Inter, 'PingFang SC', system-ui, sans-serif;
-  color: #112017;
-  background: radial-gradient(circle at 20% 10%, #ecfff1 0%, #e7f7ff 35%, #f4f9f2 100%);
+  --text-main: #112017;
+  --bg-main: radial-gradient(circle at 20% 10%, #ecfff1 0%, #e7f7ff 35%, #f4f9f2 100%);
+  --card-bg: linear-gradient(180deg, #ffffff 0%, #f6fff8 100%);
+  --card-border: #d6eddc;
+  color: var(--text-main);
+  background: var(--bg-main);
+}
+
+body[data-theme='dark'] {
+  --text-main: #e6f1ec;
+  --bg-main: radial-gradient(circle at 20% 10%, #0f1714 0%, #121a25 35%, #101713 100%);
+  --card-bg: linear-gradient(180deg, #17211c 0%, #121a16 100%);
+  --card-border: #2c4338;
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; min-height: 100vh; }
+body { margin: 0; min-height: 100vh; background: var(--bg-main); color: var(--text-main); transition: background .2s ease,color .2s ease; }
 
-a { color: #2f6b47; }
+a { color: #4d9f74; }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 30;
   backdrop-filter: blur(8px);
-  background: rgba(247, 255, 250, 0.75);
-  border-bottom: 1px solid rgba(63, 112, 83, 0.16);
+  background: color-mix(in srgb, var(--card-bg) 82%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--card-border) 70%, transparent);
 }
 
 .topbar-inner {
@@ -33,14 +44,14 @@ a { color: #2f6b47; }
 
 .container { max-width: 980px; margin: 0 auto; padding: 20px; }
 
-h1, h2, h3 { color: #1f4f35; }
+h1, h2, h3 { color: color-mix(in srgb, var(--text-main) 90%, #4a8f61); }
 
 .card {
-  background: linear-gradient(180deg, #ffffff 0%, #f6fff8 100%);
+  background: var(--card-bg);
   border-radius: 14px;
   padding: 16px;
   margin: 14px 0;
-  border: 1px solid #d6eddc;
+  border: 1px solid var(--card-border);
   box-shadow: 0 6px 16px rgba(55, 101, 73, 0.08);
 }
 
@@ -153,4 +164,19 @@ ul { padding-left: 18px; }
   background: #f4f7ff;
   padding: 10px 12px;
   border-radius: 8px;
+}
+
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
 }

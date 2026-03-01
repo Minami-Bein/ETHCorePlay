@@ -49,6 +49,20 @@ export function HomePage() {
       </div>
 
       <div className="card">
+        <h3>新手首日引导任务流</h3>
+        <ol>
+          <li>先完成「EL 核心」章节阅读（15-20 分钟）</li>
+          <li>提交第一次章节测评，建立基线分数</li>
+          <li>执行一次错题回放，记录改进点</li>
+          <li>导出首份学习报告（HTML）作为学习档案</li>
+        </ol>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Link to="/curriculum#el-core" className="btn">开始首日任务</Link>
+          <Link to="/progress" className="btn">查看错题与进度</Link>
+        </div>
+      </div>
+
+      <div className="card">
         <h3>每日任务</h3>
         <ul>{daily.map((d) => <li key={d}>{d}</li>)}</ul>
       </div>
