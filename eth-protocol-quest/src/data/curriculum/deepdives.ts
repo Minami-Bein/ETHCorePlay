@@ -1265,4 +1265,52 @@ export const deepDiveChapters: Chapter[] = [
       }
     ]
   }
+  ,{
+    id: 'state-expiry-history-expiry-deep',
+    title: 'State/History Expiry 前瞻：存储可持续性与节点运行成本',
+    level: 'advanced',
+    objective: '理解状态与历史裁剪方向对节点、索引器和应用查询路径的影响。',
+    sections: [
+      {
+        heading: '细粒度小节：为什么需要 Expiry 机制',
+        points: [
+          '链上长期累积数据会持续推高节点存储成本。',
+          '状态/历史裁剪可改善节点可持续运行门槛。',
+          '应用侧需要适配数据分层访问策略。'
+        ]
+      },
+      {
+        heading: '细粒度小节：对索引器与查询层的影响',
+        points: [
+          '全量历史依赖业务需转向归档/外部证明方案。',
+          '查询路径应支持热数据与冷数据分离。',
+          '缓存策略需要与保留窗口联动调整。'
+        ]
+      },
+      {
+        heading: '细粒度小节：迁移与兼容建议',
+        points: [
+          '提前识别依赖旧历史数据的关键接口。',
+          '建立降级策略与替代数据源。',
+          '对关键报表做一致性回归校验。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '假设历史数据永远可直接读取。',
+      '未做接口兼容导致查询链路断裂。',
+      '无冷数据方案导致运营盲区。'
+    ],
+    glossary: ['State Expiry', 'History Expiry', 'Archive Node', 'Cold Storage', 'Data Retention Window'],
+    practice: [
+      {
+        title: '实战：数据保留窗口改造清单',
+        steps: [
+          '盘点业务接口的数据保留需求。',
+          '拆分热/冷查询并定义 SLA。',
+          '制定迁移期间的数据校验方案。'
+        ]
+      }
+    ]
+  }
 ];

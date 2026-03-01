@@ -301,4 +301,13 @@ export const chapterAssessments: ChapterAssessment[] = [
       { id: 'gas-a3', prompt: '过度优化风险是？', options: ['更易审计', '可读性下降与潜在安全回归', '自动增益', '无风险'], answerIndex: 1, explanation: '需平衡性能与可维护性。' }
     ]
   }
+  ,{
+    chapterId: 'state-expiry-history-expiry-deep',
+    passThreshold: 0.7,
+    questions: [
+      { id: 'expiry-a1', prompt: 'State/History Expiry 主要解决什么问题？', options: ['界面性能', '节点存储可持续性', '钱包签名速度', '社媒传播'], answerIndex: 1, explanation: '核心是节点长期成本与可持续性。' },
+      { id: 'expiry-a2', prompt: '对应用查询层更推荐？', options: ['只用单一路径', '热冷数据分层与兼容改造', '禁用缓存', '不做迁移'], answerIndex: 1, explanation: '查询层应做分层适配。' },
+      { id: 'expiry-a3', prompt: '迁移阶段关键动作是？', options: ['忽略回归', '接口兼容检查与数据一致性校验', '仅改文档', '只做UI升级'], answerIndex: 1, explanation: '迁移需要兼容与一致性保障。' }
+    ]
+  }
 ];
