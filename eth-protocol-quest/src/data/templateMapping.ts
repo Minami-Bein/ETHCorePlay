@@ -1,0 +1,14 @@
+export const chapterTemplateMapping: Record<string, string[]> = {
+  'el-core': ['regression-test-template'],
+  'cl-core': ['consistency-vector-template'],
+  'evm-core': ['regression-test-template'],
+  'tx-lifecycle-core': ['issue-repro-template'],
+  'engine-api-core': ['issue-repro-template', 'consistency-vector-template'],
+  'eip-workflow-core': ['pr-delivery-template'],
+  'client-testing-core': ['pr-delivery-template', 'regression-test-template'],
+  'testing-systems-core': ['regression-test-template', 'consistency-vector-template'],
+  'security-core': ['issue-repro-template'],
+  'l2-da-core': ['consistency-vector-template'],
+  'el-deep-state-trie': ['regression-test-template'],
+  'cl-deep-forkchoice-finality': ['issue-repro-template']
+};

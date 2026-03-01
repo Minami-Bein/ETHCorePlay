@@ -4,6 +4,7 @@ import { chapterMap } from '../data/chapterMap';
 import { chapterAssessments } from '../data/chapterAssessments';
 import { deepDiveChapters } from '../data/curriculum/deepdives';
 import { chapterDependencies } from '../data/dependencies';
+import { chapterTemplateMapping } from '../data/templateMapping';
 import { chapterChecklists } from '../data/checklists';
 import { practiceTemplates } from '../data/practiceTemplates';
 import { foundationChapters } from '../data/curriculum/foundations';
@@ -84,6 +85,36 @@ export function CurriculumPage() {
       ...s,
       [chapterId]: { ...(s[chapterId] || {}), [idx]: !(s[chapterId] || {})[idx] }
     }));
+  };
+
+
+  const exportChapterReport = (chapterId: string) => {
+    const chapter = allChapters.find((c) => c.id === chapterId);
+    if (!chapter) return;
+    const result = chapterResults[chapterId];
+    const checklist = chapterChecklists.find((x) => x.chapterId === chapterId)?.items || [];
+    const state = checklistState[chapterId] || {};
+    const missing = checklist.filter((_, i) => !state[i]);
+    const deps = chapterDependencies[chapterId] || [];
+    const missingDeps = deps.filter((d) => !done[d]).map((d) => allChapters.find((c) => c.id === d)?.title || d);
+    const report = {
+      chapter: chapter.title,
+      objective: chapter.objective,
+      status: done[chapterId] ? '已完成' : '进行中',
+      mastery: chapterMastery[chapterId] || '初学',
+      studyMinutes: studyMinutes[chapterId] || 0,
+      assessment: result || null,
+      missingChecklist: missing,
+      missingDependencies: missingDeps,
+      timestamp: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${chapterId}-learning-report.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const setAnswer = (chapterId: string, qid: string, v: number) => {
@@ -367,8 +398,20 @@ export function CurriculumPage() {
             )}
 
             <div style={{ marginTop: 10 }}>
+              <strong>本章推荐实践模板</strong>
+              <ul>
+                {(chapterTemplateMapping[chapter.id] || []).map((tid) => {
+                  const t = practiceTemplates.find((x) => x.id === tid);
+                  return <li key={tid}>{t ? `${t.title}（${t.whenToUse}）` : tid}</li>;
+                })}
+                {(chapterTemplateMapping[chapter.id] || []).length === 0 && <li>暂无模板映射</li>}
+              </ul>
+            </div>
+
+            <div style={{ marginTop: 10 }}>
               <strong>学习完成清单（Checklist）</strong>
               <small style={{ display: 'block', margin: '4px 0 8px' }}>提示：提交测评后会自动勾选“完成章节测评”。若仍有缺项，请按缺项完成对应动作。</small>
+              <button className="btn" onClick={() => exportChapterReport(chapter.id)}>导出学习报告</button>
               <ul>
                 {(chapterChecklists.find((x) => x.chapterId === chapter.id)?.items || ['阅读本章','完成测评','完成1个练习']).map((item, i) => (
                   <li key={item}>
