@@ -496,3 +496,9 @@ body[data-theme='dark'] .kpi {
     grid-template-columns: 1.15fr .85fr;
   }
 }
+
+
+.quick-links .btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 8px 18px rgba(74, 143, 97, 0.2);
+}

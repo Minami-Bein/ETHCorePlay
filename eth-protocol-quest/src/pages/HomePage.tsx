@@ -219,6 +219,15 @@ export function HomePage() {
 
 
       <div className="card card-hover">
+        <h3 className="section-title">本周新增课程</h3>
+        <div className="quick-links">
+          <Link to="/curriculum#eip4337-production-hardening-deep" className="btn">AA 生产化加固</Link>
+          <Link to="/curriculum#ens-name-resolution-security-deep" className="btn">ENS 解析安全</Link>
+          <Link to="/curriculum#mempool-private-orderflow-deep" className="btn">Mempool/私有路由</Link>
+        </div>
+      </div>
+
+      <div className="card card-hover">
         <h3 className="section-title">协议雷达（本周）</h3>
         <div className="grid">
           <div className="level"><strong>执行层热点</strong><small>EIP-1559 费用波动与替换交易策略</small></div>

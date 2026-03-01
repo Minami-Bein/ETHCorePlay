@@ -189,4 +189,17 @@ export const practiceTemplates: PracticeTemplate[] = [
       '策略复盘与参数回调'
     ]
   }
+  ,{
+    id: 'aa-hardening-template',
+    category: 'ops',
+    title: 'AA 生产化加固模板',
+    whenToUse: 'EIP-4337 钱包从测试到生产上线时',
+    template: [
+      'Bundler 路由与失败回退策略',
+      'Paymaster 风控阈值（额度/频率/信誉）',
+      '关键指标与告警策略',
+      '用户失败提示与重试入口',
+      'EOA 紧急回退与复盘流程'
+    ]
+  }
 ];

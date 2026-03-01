@@ -1121,4 +1121,52 @@ export const deepDiveChapters: Chapter[] = [
       }
     ]
   }
+  ,{
+    id: 'eip4337-production-hardening-deep',
+    title: 'EIP-4337 生产化加固：Bundler 可靠性、Paymaster 风控与异常恢复',
+    level: 'advanced',
+    objective: '将账户抽象从 Demo 推向生产可用：稳定、可观测、可恢复。',
+    sections: [
+      {
+        heading: '细粒度小节：Bundler 可靠性治理',
+        points: [
+          '建立多 bundler 路由与失败回退策略。',
+          '监控 userOp 成功率、打包延迟、重试次数。',
+          '在高峰期动态调整排队与限流规则。'
+        ]
+      },
+      {
+        heading: '细粒度小节：Paymaster 成本与滥用防护',
+        points: [
+          '设置额度、频率、地址信誉分层。',
+          '识别可疑 userOp 模式并触发风控拦截。',
+          '对失败调用建立预算回收与报警。'
+        ]
+      },
+      {
+        heading: '细粒度小节：故障恢复与用户体验兜底',
+        points: [
+          '关键路径提供 EOA 回退入口。',
+          '失败状态可解释并提供可重试动作。',
+          '将异常类型映射到客服与运维处理手册。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '把 AA 当作无成本体验升级。',
+      '无多路由导致 bundler 单点风险。',
+      '用户失败提示不可解释，导致重复误操作。'
+    ],
+    glossary: ['EIP-4337', 'Bundler Reliability', 'Paymaster Risk Control', 'Fallback', 'UserOp Retry'],
+    practice: [
+      {
+        title: '实战：AA 生产化运行看板',
+        steps: [
+          '定义成功率/延迟/重试/拒绝率指标。',
+          '配置多级告警与自动降级动作。',
+          '输出一页式故障响应手册。'
+        ]
+      }
+    ]
+  }
 ];

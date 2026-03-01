@@ -274,4 +274,13 @@ export const chapterAssessments: ChapterAssessment[] = [
       { id: 'memp-a3', prompt: '执行质量评估应关注？', options: ['仅成交数量', '滑点/失败率/时延/重试成本', '仅手续费', '仅区块高度'], answerIndex: 1, explanation: '需要综合执行质量指标。' }
     ]
   }
+  ,{
+    chapterId: 'eip4337-production-hardening-deep',
+    passThreshold: 0.7,
+    questions: [
+      { id: 'aa-prod-a1', prompt: 'AA 生产化稳定性的首要保障之一是？', options: ['单一 bundler', '多路由与失败回退', '关闭监控', '固定重试无限制'], answerIndex: 1, explanation: '多路由与回退是可用性基础。' },
+      { id: 'aa-prod-a2', prompt: 'Paymaster 风控重点在于？', options: ['只看 UI', '额度/频率/信誉分层控制', '忽略失败成本', '不做告警'], answerIndex: 1, explanation: '风控需防滥用与成本失控。' },
+      { id: 'aa-prod-a3', prompt: '用户体验兜底最佳实践是？', options: ['只报失败码', '提供可解释失败原因与重试/回退路径', '隐藏错误', '强制刷新'], answerIndex: 1, explanation: '可解释与可操作是生产必需。' }
+    ]
+  }
 ];

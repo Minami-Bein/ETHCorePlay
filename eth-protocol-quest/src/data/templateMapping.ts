@@ -21,5 +21,6 @@ export const chapterTemplateMapping: Record<string, string[]> = {
   'oracle-data-integrity-deep': ['oracle-integrity-template', 'chaos-lite-template'],
   'upgrade-oncall-playbook-deep': ['upgrade-oncall-template', 'chaos-lite-template'],
   'ens-name-resolution-security-deep': ['ens-security-template', 'wallet-signing-check-template'],
-  'mempool-private-orderflow-deep': ['orderflow-routing-template', 'chaos-lite-template']
+  'mempool-private-orderflow-deep': ['orderflow-routing-template', 'chaos-lite-template'],
+  'eip4337-production-hardening-deep': ['aa-hardening-template', 'wallet-signing-check-template']
 };
