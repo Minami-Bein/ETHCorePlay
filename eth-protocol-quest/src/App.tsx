@@ -27,6 +27,7 @@ export function App() {
 
   return (
     <>
+      <div className="mesh-bg" aria-hidden />
       <header className="topbar">
         <div className="topbar-inner">
           <Link to="/" className="brand">🌿 Ethereum Infinite Garden Quest</Link>

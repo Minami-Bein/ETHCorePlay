@@ -128,6 +128,7 @@ export function HomePage() {
         </div>
       </div>
 
+      <div className="stagger">
       <div className="card card-hover">
         <h3 className="section-title">今日智能建议</h3>
         <div className="notice">{smartRecommendation}</div>
@@ -239,6 +240,8 @@ export function HomePage() {
           <Link to="/curriculum#pbs-inclusion-censorship-deep" className="btn">去学 PBS</Link>
           <Link to="/curriculum#verkle-stateless-deep" className="btn">去学 Verkle</Link>
         </div>
+      </div>
+
       </div>
 
       <div className="card">
