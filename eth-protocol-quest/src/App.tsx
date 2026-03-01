@@ -1,5 +1,6 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Map, BookOpen, BookMarked, BarChart3, Leaf } from 'lucide-react';
 import { HomePage } from './pages/HomePage';
 import { LevelPage } from './pages/LevelPage';
 import { MapPage } from './pages/MapPage';
@@ -8,48 +9,68 @@ import { GlossaryPage } from './pages/GlossaryPage';
 import { CurriculumPage } from './pages/CurriculumPage';
 
 export function App() {
-  const [themeMode, setThemeMode] = useState<'system' | 'light' | 'dark'>(() => (localStorage.getItem('epq_theme_mode') as any) || 'system');
-  const [systemDark, setSystemDark] = useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-  useEffect(() => {
-    if (!window.matchMedia) return;
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const fn = (e: MediaQueryListEvent) => setSystemDark(e.matches);
-    mq.addEventListener?.('change', fn);
-    return () => mq.removeEventListener?.('change', fn);
-  }, []);
-
-  useEffect(() => {
-    const effectiveDark = themeMode === 'system' ? systemDark : themeMode === 'dark';
-    document.body.dataset.theme = effectiveDark ? 'dark' : 'light';
-    localStorage.setItem('epq_theme_mode', themeMode);
-  }, [themeMode, systemDark]);
+  const location = useLocation();
 
   return (
     <>
       <header className="topbar">
         <div className="topbar-inner">
-          <Link to="/" className="brand">🌿 Ethereum Infinite Garden Quest</Link>
+          <Link to="/" className="brand">
+            <Leaf size={24} color="#4a8f61" />
+            ETHCorePlay
+          </Link>
           <nav>
-            <Link to="/map">地图</Link>
-            <Link to="/progress">总览</Link>
-            <Link to="/curriculum">课程</Link>
-            <Link to="/glossary">术语</Link>
-            <button className="btn btn-ghost" onClick={() => setThemeMode('light')}>浅色</button>
-            <button className="btn btn-ghost" onClick={() => setThemeMode('dark')}>暗色</button>
-            <button className="btn btn-ghost" onClick={() => setThemeMode('system')}>跟随系统</button>
+            <Link to="/map" className={location.pathname === '/map' ? 'active' : ''}>
+              <Map size={18} /> 地图
+            </Link>
+            <Link to="/progress" className={location.pathname === '/progress' ? 'active' : ''}>
+              <BarChart3 size={18} /> 总览
+            </Link>
+            <Link to="/curriculum" className={location.pathname === '/curriculum' ? 'active' : ''}>
+              <BookOpen size={18} /> 课程
+            </Link>
+            <Link to="/glossary" className={location.pathname === '/glossary' ? 'active' : ''}>
+              <BookMarked size={18} /> 术语
+            </Link>
           </nav>
         </div>
       </header>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/level/:id" element={<LevelPage />} />
-        <Route path="/progress" element={<ProgressPage />} />
-        <Route path="/curriculum" element={<CurriculumPage />} />
-        <Route path="/glossary" element={<GlossaryPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+              <HomePage />
+            </motion.div>
+          } />
+          <Route path="/map" element={
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+              <MapPage />
+            </motion.div>
+          } />
+          <Route path="/level/:id" element={
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+              <LevelPage />
+            </motion.div>
+          } />
+          <Route path="/progress" element={
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+              <ProgressPage />
+            </motion.div>
+          } />
+          <Route path="/curriculum" element={
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+              <CurriculumPage />
+            </motion.div>
+          } />
+          <Route path="/glossary" element={
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+              <GlossaryPage />
+            </motion.div>
+          } />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AnimatePresence>
     </>
   );
 }

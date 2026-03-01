@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "lint": "tsc -b",
     "preview": "vite preview"
   },
   "dependencies": {
+    "framer-motion": "^12.34.3",
+    "lucide-react": "^0.575.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
-    "zustand": "^5.0.1"
+    "react-router-dom": "^6.30.3",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
