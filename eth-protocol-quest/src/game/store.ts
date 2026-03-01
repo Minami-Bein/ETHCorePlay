@@ -20,12 +20,14 @@ type ProgressState = {
   chapterResults: Record<string, ChapterResult>;
   chapterMastery: Record<string, '初学' | '掌握' | '巩固'>;
   studyMinutes: Record<string, number>;
+  studyHistory: Record<string, Array<{ ts: number; action: string; detail?: string }>>;
   completeLevel: (id: number, gainedXp: number) => void;
   addWrongQuestion: (q: WrongQuestion) => void;
   clearWrongBook: () => void;
   setKnowledgeStatus: (id: string, status: KnowledgeNode['status']) => void;
   setChapterResult: (chapterId: string, result: ChapterResult) => void;
   addStudyMinutes: (chapterId: string, minutes: number) => void;
+  addStudyEvent: (chapterId: string, action: string, detail?: string) => void;
 };
 
 export const useProgressStore = create<ProgressState>((set) => ({
@@ -37,6 +39,7 @@ export const useProgressStore = create<ProgressState>((set) => ({
   chapterResults: {},
   chapterMastery: {},
   studyMinutes: {},
+  studyHistory: {},
   completeLevel: (id, gainedXp) =>
     set((s) => ({
       xp: s.xp + gainedXp,
@@ -75,6 +78,23 @@ export const useProgressStore = create<ProgressState>((set) => ({
       studyMinutes: {
         ...s.studyMinutes,
         [chapterId]: Math.max(0, (s.studyMinutes[chapterId] || 0) + minutes)
+      },
+      studyHistory: {
+        ...s.studyHistory,
+        [chapterId]: [
+          ...(s.studyHistory[chapterId] || []),
+          { ts: Date.now(), action: 'study_minutes', detail: `+${minutes}min` }
+        ].slice(-40)
+      }
+    })),
+  addStudyEvent: (chapterId, action, detail) =>
+    set((s) => ({
+      studyHistory: {
+        ...s.studyHistory,
+        [chapterId]: [
+          ...(s.studyHistory[chapterId] || []),
+          { ts: Date.now(), action, detail }
+        ].slice(-40)
       }
     }))
 }));

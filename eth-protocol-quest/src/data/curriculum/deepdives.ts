@@ -113,4 +113,100 @@ export const deepDiveChapters: Chapter[] = [
       }
     ]
   }
+  ,{
+    id: 'client-contrib-deep',
+    title: '客户端贡献深度实操：从 Issue 到合并',
+    level: 'advanced',
+    objective: '将协议学习转化为真实开源贡献能力。',
+    sections: [
+      {
+        heading: '细粒度小节：Issue 选择与范围控制',
+        points: [
+          '优先选择可复现、边界清晰的小任务。',
+          '避免首次贡献就跨多个模块。',
+          '先确认预期行为再写代码。'
+        ]
+      },
+      {
+        heading: '细粒度小节：测试先行与证据链',
+        points: [
+          '先写失败测试，后写修复。',
+          'PR 描述必须包含验证命令和结果。',
+          '保留日志、截图、对比输出作为证据。'
+        ]
+      },
+      {
+        heading: '细粒度小节：Review 协作策略',
+        points: [
+          '针对每条 review 给出明确响应。',
+          '必要时补基准测试/边界案例。',
+          '迭代后更新 PR 摘要便于二次审阅。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '提交过大 PR 导致审阅阻塞。',
+      '没有测试证据导致反复回退。',
+      '忽视 review 背后的协议约束。'
+    ],
+    glossary: ['Issue Triage', 'Repro Steps', 'Regression Proof', 'PR Review Loop'],
+    practice: [
+      {
+        title: '实战：最小贡献闭环模板',
+        steps: [
+          '选择一个 issue 并确认范围。',
+          '编写失败测试并记录预期输出。',
+          '提交修复 + 证据链 + review 响应记录。'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'testing-deep-harness',
+    title: '测试深度实操：测试夹具与一致性回归流水线',
+    level: 'advanced',
+    objective: '建立可持续的测试工程实践（不是一次性脚本）。',
+    sections: [
+      {
+        heading: '细粒度小节：测试夹具（Harness）设计',
+        points: [
+          '将重复 setup 抽象为可复用夹具。',
+          '输入向量与期望输出应版本化。',
+          '失败信息必须可定位模块边界。'
+        ]
+      },
+      {
+        heading: '细粒度小节：一致性回归流水线',
+        points: [
+          '同向量在多实现上定期执行。',
+          '差异自动归档并生成告警。',
+          '把高频问题沉淀为固定回归集。'
+        ]
+      },
+      {
+        heading: '细粒度小节：CI 质量门禁',
+        points: [
+          '关键测试失败应阻止合并。',
+          '区分 flaky 与 deterministic failure。',
+          '建立“修复+补测”强约束流程。'
+        ]
+      }
+    ],
+    pitfalls: [
+      '测试无法复现导致“玄学通过”。',
+      '只测 happy path，边界无覆盖。',
+      '缺少多实现对比，隐藏一致性风险。'
+    ],
+    glossary: ['Test Harness', 'Flaky Test', 'CI Gate', 'Cross-client Consistency'],
+    practice: [
+      {
+        title: '实战：搭建最小一致性流水线',
+        steps: [
+          '定义 3 组测试向量（正常/边界/异常）。',
+          '在两种实现中执行并记录结果。',
+          '把差异收敛成回归测试用例。'
+        ]
+      }
+    ]
+  }
 ];

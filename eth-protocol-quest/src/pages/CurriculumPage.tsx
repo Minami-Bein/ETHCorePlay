@@ -40,6 +40,8 @@ export function CurriculumPage() {
     studyMinutes,
     setChapterResult,
     addStudyMinutes,
+    addStudyEvent,
+    studyHistory,
     knowledgeMap,
     setKnowledgeStatus
   } = useProgressStore();
@@ -88,15 +90,17 @@ export function CurriculumPage() {
   };
 
 
-  const exportChapterReport = (chapterId: string) => {
+  const exportChapterReport = (chapterId: string, format: 'json' | 'html' = 'json') => {
     const chapter = allChapters.find((c) => c.id === chapterId);
     if (!chapter) return;
-    const result = chapterResults[chapterId];
+    const result = chapterResults[chapterId] as any;
     const checklist = chapterChecklists.find((x) => x.chapterId === chapterId)?.items || [];
     const state = checklistState[chapterId] || {};
     const missing = checklist.filter((_, i) => !state[i]);
     const deps = chapterDependencies[chapterId] || [];
     const missingDeps = deps.filter((d) => !done[d]).map((d) => allChapters.find((c) => c.id === d)?.title || d);
+    const history = studyHistory[chapterId] || [];
+
     const report = {
       chapter: chapter.title,
       objective: chapter.objective,
@@ -106,13 +110,34 @@ export function CurriculumPage() {
       assessment: result || null,
       missingChecklist: missing,
       missingDependencies: missingDeps,
+      history,
       timestamp: new Date().toISOString()
     };
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+
+    if (format === 'json') {
+      const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${chapterId}-learning-report.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>${chapter.title} 学习报告</title>
+<style>body{font-family:Inter,Arial,sans-serif;padding:24px;color:#1a2b20}.card{border:1px solid #cfe5d5;border-radius:10px;padding:12px;margin:10px 0}h1,h2{color:#22543a}li{margin:4px 0}</style></head><body>
+<h1>${chapter.title} 学习报告</h1>
+<div class='card'><p><b>目标：</b>${chapter.objective}</p><p><b>状态：</b>${report.status}</p><p><b>掌握度：</b>${report.mastery}</p><p><b>学习时长：</b>${report.studyMinutes} 分钟</p></div>
+<div class='card'><h2>测评</h2><p>${result ? `得分 ${result.score}/${result.total}，${result.passed ? '通过' : '未通过'}` : '暂无测评'}</p></div>
+<div class='card'><h2>缺项</h2><ul>${missing.map((m) => `<li>${m}</li>`).join('') || '<li>无</li>'}</ul><p><b>缺失前置：</b>${missingDeps.join(' / ') || '无'}</p></div>
+<div class='card'><h2>学习历史时间线</h2><ul>${history.map((h: any) => `<li>${new Date(h.ts).toLocaleString()} - ${h.action} ${h.detail || ''}</li>`).join('') || '<li>暂无</li>'}</ul></div>
+</body></html>`;
+    const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${chapterId}-learning-report.json`;
+    a.download = `${chapterId}-learning-report.html`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -140,6 +165,7 @@ export function CurriculumPage() {
     const passed = score / total >= threshold;
 
     setChapterResult(chapterId, { score, total, passed, threshold, wrongIds } as any);
+    addStudyEvent(chapterId, onlyWrong ? 'retest_submit' : 'assessment_submit', `score=${score}/${total}`);
 
     // Checklist 联动：提交测评后自动勾选“完成章节测评”项（索引1）
     setChecklistState((s) => ({
@@ -411,7 +437,7 @@ export function CurriculumPage() {
             <div style={{ marginTop: 10 }}>
               <strong>学习完成清单（Checklist）</strong>
               <small style={{ display: 'block', margin: '4px 0 8px' }}>提示：提交测评后会自动勾选“完成章节测评”。若仍有缺项，请按缺项完成对应动作。</small>
-              <button className="btn" onClick={() => exportChapterReport(chapter.id)}>导出学习报告</button>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}><button className="btn" onClick={() => exportChapterReport(chapter.id, 'json')}>导出报告 JSON</button><button className="btn" onClick={() => exportChapterReport(chapter.id, 'html')}>导出报告 HTML</button></div>
               <ul>
                 {(chapterChecklists.find((x) => x.chapterId === chapter.id)?.items || ['阅读本章','完成测评','完成1个练习']).map((item, i) => (
                   <li key={item}>
@@ -425,6 +451,16 @@ export function CurriculumPage() {
                     </label>
                   </li>
                 ))}
+              </ul>
+            </div>
+
+            <div style={{ marginTop: 10 }}>
+              <strong>学习历史时间线（复习轨迹）</strong>
+              <ul>
+                {(studyHistory[chapter.id] || []).slice(-6).map((h, idx) => (
+                  <li key={`${h.ts}-${idx}`}>{new Date(h.ts).toLocaleString()} - {h.action} {h.detail || ''}</li>
+                ))}
+                {(studyHistory[chapter.id] || []).length === 0 && <li>暂无学习记录（可点击 +15 分钟 或提交测评后生成）</li>}
               </ul>
             </div>
 
