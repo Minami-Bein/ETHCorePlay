@@ -65,5 +65,17 @@ export const chapterMap: ChapterMapNode[] = [
     chapterTitle: 'L2/DA 专题',
     keyTerms: ['Rollup', 'Settlement', 'Data Availability', 'Bridge'],
     practiceTitles: ['L2→L1 结算路径图', 'DA 假设对比表']
+  },
+  {
+    chapterId: 'el-deep-state-trie',
+    chapterTitle: 'EL 深层：状态树与存储树',
+    keyTerms: ['State Trie', 'Storage Trie', 'Merkle Proof', 'SSTORE'],
+    practiceTitles: ['状态访问热点分析']
+  },
+  {
+    chapterId: 'cl-deep-forkchoice-finality',
+    chapterTitle: 'CL 深层：Fork choice 与最终性故障模式',
+    keyTerms: ['Finality Delay', 'Reorg Window', 'Validator Liveness'],
+    practiceTitles: ['最终性延迟演练']
   }
 ];

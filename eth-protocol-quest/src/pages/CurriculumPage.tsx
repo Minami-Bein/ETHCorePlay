@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { chapterMap } from '../data/chapterMap';
 import { chapterAssessments } from '../data/chapterAssessments';
 import { foundationChapters } from '../data/curriculum/foundations';
+import { deepDiveChapters } from '../data/curriculum/deepdives';
 import { learningPaths } from '../data/learningPaths';
 import { useProgressStore } from '../game/store';
 
@@ -47,13 +48,15 @@ export function CurriculumPage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
   }, [done]);
 
+  const allChapters = useMemo(() => [...foundationChapters, ...deepDiveChapters], []);
+
   const chapters = useMemo(
-    () => (onlyPending ? foundationChapters.filter((c) => !done[c.id]) : foundationChapters),
-    [onlyPending, done]
+    () => (onlyPending ? allChapters.filter((c) => !done[c.id]) : allChapters),
+    [onlyPending, done, allChapters]
   );
 
   const completedCount = Object.values(done).filter(Boolean).length;
-  const progressPct = Math.round((completedCount / foundationChapters.length) * 100);
+  const progressPct = Math.round((completedCount / allChapters.length) * 100);
 
   const toggleDone = (id: string) => setDone((s) => ({ ...s, [id]: !s[id] }));
 
@@ -90,18 +93,24 @@ export function CurriculumPage() {
   };
 
   const recommendation = useMemo(() => {
-    const failed = Object.entries(chapterResults).filter(([, r]) => !r.passed).map(([cid]) => cid);
+    const failed = Object.entries(chapterResults).filter(([, r]) => !r.passed);
     if (failed.length) {
-      const c = foundationChapters.find((x) => x.id === failed[0]);
-      return `优先复习未通过章节：${c?.title ?? failed[0]}（先看误区，再做测评）。`;
+      const ranked = failed
+        .map(([cid, r]) => ({ cid, score: r.score / Math.max(1, r.total), wrong: (r.wrongIds || []).length }))
+        .sort((a, b) => a.score - b.score || b.wrong - a.wrong);
+      const top = ranked[0];
+      const c = allChapters.find((x) => x.id === top.cid);
+      return `优先复习低分章节：${c?.title ?? top.cid}（当前得分率 ${(top.score * 100).toFixed(0)}%，错题 ${top.wrong} 条）。`;
     }
     if (wrongBook.length > 0) {
-      return `你有 ${wrongBook.length} 条错题，建议先去错题本复习，再继续下一章。`;
+      const themes = ['Gas/费用', '共识最终性', '执行语义', '接口协同', '测试与安全'];
+      const theme = themes[wrongBook.length % themes.length];
+      return `建议先复习错题主题：${theme}（当前错题 ${wrongBook.length} 条），完成后再做下一章测评。`;
     }
-    const next = foundationChapters.find((c) => !done[c.id]);
+    const next = allChapters.find((c) => !done[c.id]);
     if (next) return `建议下一章学习：${next.title}`;
     return '你已完成全部章节，建议进入核心贡献者路径并提交第一份可验证贡献。';
-  }, [chapterResults, wrongBook.length, done]);
+  }, [chapterResults, wrongBook.length, done, allChapters]);
 
   return (
     <main className="container">
@@ -130,8 +139,17 @@ export function CurriculumPage() {
       </section>
 
       <section className="card">
+        <h3>复习节奏建议</h3>
+        <ul>
+          <li>每日：1 章重点卡 + 1 次章节测评</li>
+          <li>隔日：执行“错题回放 + 二次测评”</li>
+          <li>每周：完成 1 个实战练习并复盘</li>
+        </ul>
+      </section>
+
+      <section className="card">
         <h3>课程导航与进度</h3>
-        <p>总体进度：<strong>{completedCount}/{foundationChapters.length}</strong>（{progressPct}%）</p>
+        <p>总体进度：<strong>{completedCount}/{allChapters.length}</strong>（{progressPct}%）</p>
         <div style={{ background: '#e6f1e8', borderRadius: 10, height: 10, overflow: 'hidden', marginBottom: 10 }}>
           <div style={{ width: `${progressPct}%`, height: '100%', background: 'linear-gradient(90deg,#4a8f61,#5a76dc)' }} />
         </div>
@@ -143,7 +161,7 @@ export function CurriculumPage() {
           <Link to="/glossary" className="btn">去术语页复习</Link>
         </div>
         <ul>
-          {foundationChapters.map((c, i) => (
+          {allChapters.map((c, i) => (
             <li key={c.id}>
               <a href={`#${c.id}`}>{i + 1}. {c.title}</a> {done[c.id] ? '✅' : '🕓'}
               {chapterResults[c.id] ? ` · 章节测评 ${chapterResults[c.id].score}/${chapterResults[c.id].total} ${chapterResults[c.id].passed ? '✅通过' : '❌未通过'}` : ''}
@@ -168,6 +186,10 @@ export function CurriculumPage() {
         return (
           <section key={chapter.id} id={chapter.id} className="card">
             <h3>{idx + 1}. {chapter.title}</h3>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+            <span style={{ padding: '2px 8px', borderRadius: 999, background: done[chapter.id] ? '#daf4df' : '#f3f5f7' }}>章节状态：{done[chapter.id] ? '已完成' : '进行中'}</span>
+            <span style={{ padding: '2px 8px', borderRadius: 999, background: chapterResults[chapter.id]?.passed ? '#dbeafe' : '#fef3c7' }}>测评：{chapterResults[chapter.id] ? (chapterResults[chapter.id].passed ? '通过' : '待提高') : '未提交'}</span>
+          </div>
             <p><strong>学习目标：</strong>{chapter.objective}</p>
             <p><strong>难度：</strong>{chapter.level}</p>
 
