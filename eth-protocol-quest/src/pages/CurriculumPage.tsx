@@ -33,6 +33,8 @@ export function CurriculumPage() {
   const [levelFilter, setLevelFilter] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
   const [domainFilter, setDomainFilter] = useState<'all' | 'EL' | 'CL' | 'EVM' | 'EIP' | 'Client' | 'Testing' | 'Security' | 'L2'>('all');
   const [sortMode, setSortMode] = useState<'default' | 'difficulty' | 'progress'>('default');
+  const [collapsedDomains, setCollapsedDomains] = useState<Record<string, boolean>>({});
+  const [milestoneToast, setMilestoneToast] = useState<string | null>(null);
   const {
     wrongBook,
     chapterResults,
@@ -64,7 +66,9 @@ export function CurriculumPage() {
     let base = onlyPending ? allChapters.filter((c) => !done[c.id]) : allChapters;
     if (levelFilter !== 'all') base = base.filter((c) => c.level === levelFilter);
     if (domainFilter !== 'all') base = base.filter((c) => chapterDomain(c.id) === domainFilter);
-    const q = query.trim().toLowerCase();
+    const q0 = query.trim().toLowerCase();
+    const aliases: Record<string, string> = { pbs: 'proposer builder separation', blob: '4844 data availability', aa: 'account abstraction 4337', verkle: 'stateless witness', mev: 'builder relay proposer', eof: 'pectra bytecode format', lst: 'liquid staking token', lrt: 'liquid restaking token' };
+    const q = q0 ? `${q0} ${(aliases[q0] || '')}`.trim() : '';
     let result = !q ? base : base.filter((c) => {
       const blob = [
         c.title,
@@ -249,6 +253,21 @@ export function CurriculumPage() {
     return { score: Math.round(avg * 100), stability, recencyWrong };
   };
 
+  useEffect(() => {
+    const foundationDone = ['el-core', 'cl-core', 'evm-core', 'tx-lifecycle-core'].every((id) => done[id]);
+    const builderDone = ['engine-api-core', 'eip-workflow-core', 'client-testing-core'].every((id) => done[id]);
+    if (foundationDone && !badges.includes('Path Milestone: Foundation')) {
+      awardBadge('Path Milestone: Foundation');
+      setMilestoneToast('🎉 里程碑达成：基础路径完成');
+      setTimeout(() => setMilestoneToast(null), 2400);
+    }
+    if (builderDone && !badges.includes('Path Milestone: Builder')) {
+      awardBadge('Path Milestone: Builder');
+      setMilestoneToast('🚀 里程碑达成：开发者路径完成');
+      setTimeout(() => setMilestoneToast(null), 2400);
+    }
+  }, [done, badges, awardBadge]);
+
   const recommendation = useMemo(() => {
     const failed = Object.entries(chapterResults).filter(([, r]) => !r.passed);
     if (failed.length) {
@@ -282,6 +301,17 @@ export function CurriculumPage() {
     return '你已完成全部章节，建议进入核心贡献者路径并提交第一份可验证贡献。';
   }, [chapterResults, wrongBook.length, done, allChapters, studyMinutes]);
 
+  const domainBoard = useMemo(() => {
+    const board: Record<string, { total: number; done: number }> = {};
+    allChapters.forEach((c) => {
+      const d = chapterDomain(c.id);
+      if (!board[d]) board[d] = { total: 0, done: 0 };
+      board[d].total += 1;
+      if (done[c.id]) board[d].done += 1;
+    });
+    return board;
+  }, [allChapters, done]);
+
   const avgScore = useMemo(() => {
     const vals = Object.values(chapterResults).map((r) => Math.round((r.score / Math.max(1, r.total)) * 100));
     if (!vals.length) return 0;
@@ -300,6 +330,7 @@ export function CurriculumPage() {
       <Link to="/">← 首页</Link>
       <h2>系统化学习课程（基础→进阶）</h2>
       <p>学习优先：先完整掌握章节，再用闯关做检验。</p>
+      {milestoneToast && <div className="toast">{milestoneToast}</div>}
 
       <section className="card">
         <h3>章节知识点检索</h3>
@@ -320,7 +351,7 @@ export function CurriculumPage() {
           placeholder="输入关键词：如 Engine API / Finality / Gas / Rollup"
           style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #cde3d2' }}
         />
-        <small>当前命中章节：{chapters.length}</small>
+        <small>当前命中章节：{chapters.length}（支持别名检索：pbs/blob/aa/verkle/mev/eof/lst/lrt）</small>
       </section>
 
       <section className="card">
@@ -346,6 +377,20 @@ export function CurriculumPage() {
             </div>
           ))}
         </div>
+      </section>
+
+
+      <section className="card">
+        <h3>按领域分组折叠</h3>
+        {Object.entries(domainBoard).map(([d, stat]) => (
+          <div key={d} style={{ marginBottom: 8 }}>
+            <div className="accordion-header">
+              <strong>{d}：{stat.done}/{stat.total}</strong>
+              <button className="btn btn-ghost" onClick={() => setCollapsedDomains((s) => ({ ...s, [d]: !s[d] }))}>{collapsedDomains[d] ? '展开' : '收起'}</button>
+            </div>
+            {!collapsedDomains[d] && <small>建议：{stat.done < stat.total ? '优先补齐该领域基础章节' : '可进入该领域深度专题'}</small>}
+          </div>
+        ))}
       </section>
 
       <section className="card">
