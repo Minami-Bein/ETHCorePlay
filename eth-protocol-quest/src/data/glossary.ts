@@ -39,5 +39,26 @@ export const glossary = [
   { term: 'TWAP', desc: '时间加权平均价格，常用于降低短时操纵影响。' },
   { term: 'Bridge Trust Model', desc: '跨链桥验证与托管机制对应的信任假设模型。' },
   { term: 'Chaos-lite', desc: '轻量故障注入演练方式，用于验证观测与恢复能力。' },
-  { term: 'Runbook / Playbook', desc: '标准化运维/故障处理手册，强调可复现执行。' }
+  { term: 'Runbook / Playbook', desc: '标准化运维/故障处理手册，强调可复现执行。' },
+
+  { term: 'EL Client Diversity', desc: '执行层客户端多样性，用于降低实现单点风险。' },
+  { term: 'CL Client Diversity', desc: '共识层客户端多样性，降低共识实现集中风险。' },
+  { term: 'Weak Subjectivity', desc: 'PoS 系统中对近期可信检查点的最小信任假设。' },
+  { term: 'Sync Committee', desc: '用于轻客户端验证链头的验证者委员会机制。' },
+  { term: 'Proposer Boost', desc: 'fork choice 中对提议者区块的短时权重增强。' },
+  { term: 'Attestation', desc: '验证者对区块/链头状态的投票消息。' },
+  { term: 'Execution Payload', desc: 'CL 区块中携带的执行层载荷数据结构。' },
+  { term: 'Builder Relay', desc: '在构建者与提议者之间传递区块候选的中继角色。' },
+  { term: 'Blob Gas Price', desc: 'EIP-4844 中 blob 资源的动态价格信号。' },
+  { term: 'Data Availability Sampling (DAS)', desc: '通过抽样验证大规模数据可用性的技术路线。' },
+  { term: 'Sequencer', desc: 'Rollup 中负责排序并打包交易的角色。' },
+  { term: 'Fraud Proof', desc: 'Optimistic Rollup 用于挑战无效状态转移的证明机制。' },
+  { term: 'Validity Proof', desc: 'ZK Rollup 提交的有效性证明，证明状态转移正确。' },
+  { term: 'Escape Hatch', desc: 'L2 异常时用户可直接通过 L1 路径退出的机制。' },
+  { term: 'Permit2', desc: '改进授权体验的签名授权方案，需关注权限边界。' },
+  { term: 'Domain Separator', desc: 'EIP-712 中用于隔离签名上下文的关键字段组合。' },
+  { term: 'Oracle Heartbeat', desc: '预言机定期更新频率，过慢会增加 staleness 风险。' },
+  { term: 'Circuit Breaker', desc: '异常阈值触发后的自动降级/暂停保护机制。' },
+  { term: 'Finality Gadget', desc: '提供强最终性保证的机制组件（如 checkpoint finality）。' },
+  { term: 'State Bloat', desc: '链上状态持续增长导致节点成本上升的问题。' }
 ];

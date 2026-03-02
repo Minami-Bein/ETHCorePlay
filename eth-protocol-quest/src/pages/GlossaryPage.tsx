@@ -10,6 +10,16 @@ export function GlossaryPage() {
     return glossary.filter((g) => `${g.term} ${g.desc}`.toLowerCase().includes(k));
   }, [q]);
 
+  const grouped = useMemo(() => {
+    const buckets: Record<string, typeof filtered> = {};
+    filtered.forEach((g) => {
+      const c = /^[A-Za-z]/.test(g.term) ? g.term[0].toUpperCase() : '#';
+      if (!buckets[c]) buckets[c] = [];
+      buckets[c].push(g);
+    });
+    return Object.entries(buckets).sort((a,b)=>a[0].localeCompare(b[0]));
+  }, [filtered]);
+
   return (
     <main className="container">
       <Link to="/">← 首页</Link>
@@ -24,15 +34,23 @@ export function GlossaryPage() {
         <small className="subtle">当前术语：{filtered.length}/{glossary.length}</small>
       </section>
 
-      <div className="card">
-        <ul>
-          {filtered.map((g) => (
-            <li key={g.term} style={{ marginBottom: 12 }}>
-              <strong>{g.term}</strong>
-              <div className="subtle">{g.desc}</div>
-            </li>
-          ))}
-        </ul>
+      <div className="card card-hover">
+        <div className="chips" style={{ marginBottom: 10 }}>
+          {grouped.map(([k]) => <a key={k} href={`#g-${k}`} className="chip">{k}</a>)}
+        </div>
+        {grouped.map(([k, list]) => (
+          <section key={k} id={`g-${k}`} style={{ marginBottom: 14 }}>
+            <h3 style={{ marginBottom: 8 }}>{k}</h3>
+            <div className="grid">
+              {list.map((g) => (
+                <article key={g.term} className="level" style={{ cursor: 'default' }}>
+                  <strong>{g.term}</strong>
+                  <small>{g.desc}</small>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </main>
   );
