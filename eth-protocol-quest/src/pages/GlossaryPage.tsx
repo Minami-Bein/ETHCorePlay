@@ -1,9 +1,16 @@
 import { Link } from 'react-router-dom';
-import { glossary } from '../data/glossary';
-import { useMemo, useState } from 'react';
+import { glossary as localGlossary } from '../data/glossary';
+import { useEffect, useMemo, useState } from 'react';
+import { loadCmsJson } from '../services/cms';
 
 export function GlossaryPage() {
   const [q, setQ] = useState('');
+  const [glossary, setGlossary] = useState(localGlossary);
+
+  useEffect(() => {
+    loadCmsJson('glossary', localGlossary).then(setGlossary);
+  }, []);
+
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (!k) return glossary;

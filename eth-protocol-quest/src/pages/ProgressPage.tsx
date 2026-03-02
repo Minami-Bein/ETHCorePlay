@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useProgressStore } from '../game/store';
 import { cloudEnabled, signInWithOtp, pullState, pushState } from '../services/cloudSync';
 import { exportElementPng } from '../components/ui/ShareReportCard';
 
 export function ProgressPage() {
-  const { xp, completed, wrongBook, clearWrongBook, knowledgeMap, setKnowledgeStatus } = useProgressStore();
+  const storeState = useProgressStore();
+  const { xp, completed, wrongBook, clearWrongBook, knowledgeMap, setKnowledgeStatus } = storeState;
   const [email, setEmail] = useState('');
 
   const doneCount = useMemo(() => Object.values(completed).filter(Boolean).length, [completed]);
@@ -16,6 +17,21 @@ export function ProgressPage() {
     const pick = (t: string) => /gas|fee/i.test(t) ? 'Gas' : /final|fork|ghost/i.test(t) ? 'Finality' : /security|reorg|mev|censor/i.test(t) ? 'Security' : 'General';
     return wrongBook.reduce((acc: Record<string, number>, w) => { const k = pick(`${w.prompt} ${w.explanation}`); acc[k] = (acc[k] || 0) + 1; return acc; }, {});
   }, [wrongBook]);
+
+  useEffect(() => {
+    if (!cloudEnabled) return;
+    const id = setInterval(() => {
+      pushState(useProgressStore.getState()).catch(() => {});
+    }, 45000);
+    const onUnload = () => {
+      pushState(useProgressStore.getState()).catch(() => {});
+    };
+    window.addEventListener('beforeunload', onUnload);
+    return () => {
+      clearInterval(id);
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [cloudEnabled]);
 
   const domainGroups = useMemo(() => {
     return knowledgeMap.reduce<Record<string, typeof knowledgeMap>>((acc, n) => {

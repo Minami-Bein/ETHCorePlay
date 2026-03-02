@@ -695,3 +695,17 @@ body[data-theme='dark'] .topbar nav {
   height: 100%;
   background: linear-gradient(90deg, var(--brand-garden), var(--brand-primary));
 }
+
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border: 1px solid var(--border-focus);
+  border-radius: 10px;
+  z-index: 1000;
+}
+.skip-link:focus { left: 12px; top: 8px; }

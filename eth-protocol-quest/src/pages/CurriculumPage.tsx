@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { chapterMap } from '../data/chapterMap';
-import { chapterAssessments } from '../data/chapterAssessments';
+import { chapterAssessments as localAssessments } from '../data/chapterAssessments';
 import { deepDiveChapters } from '../data/curriculum/deepdives';
 import { chapterDependencies } from '../data/dependencies';
 import { chapterTemplateMapping } from '../data/templateMapping';
@@ -9,6 +9,7 @@ import { chapterChecklists } from '../data/checklists';
 import { practiceTemplates } from '../data/practiceTemplates';
 import { foundationChapters } from '../data/curriculum/foundations';
 import { learningPaths } from '../data/learningPaths';
+import { loadCmsJson } from '../services/cms';
 import { useProgressStore } from '../game/store';
 
 type DoneMap = Record<string, boolean>;
@@ -37,6 +38,8 @@ export function CurriculumPage() {
   const [collapsedDomains, setCollapsedDomains] = useState<Record<string, boolean>>({});
   const [milestoneToast, setMilestoneToast] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(8);
+  const [cmsChapters, setCmsChapters] = useState([...foundationChapters, ...deepDiveChapters]);
+  const [cmsAssessments, setCmsAssessments] = useState(localAssessments);
   const {
     wrongBook,
     chapterResults,
@@ -62,7 +65,12 @@ export function CurriculumPage() {
   } = useProgressStore();
 
 
-  const allChapters = useMemo(() => [...foundationChapters, ...deepDiveChapters], []);
+  useEffect(() => {
+    loadCmsJson('chapters', [...foundationChapters, ...deepDiveChapters]).then((d: any) => setCmsChapters(d));
+    loadCmsJson('assessments', localAssessments).then((d: any) => setCmsAssessments(d));
+  }, []);
+
+  const allChapters = useMemo(() => cmsChapters, [cmsChapters]);
 
 
   useEffect(() => {
@@ -84,7 +92,7 @@ export function CurriculumPage() {
     if (levelFilter !== 'all') base = base.filter((c) => c.level === levelFilter);
     if (domainFilter !== 'all') base = base.filter((c) => chapterDomain(c.id) === domainFilter);
     const q0 = query.trim().toLowerCase();
-    const aliases: Record<string, string> = { pbs: 'proposer builder separation', blob: '4844 data availability', aa: 'account abstraction 4337', verkle: 'stateless witness', mev: 'builder relay proposer', eof: 'pectra bytecode format', lst: 'liquid staking token', lrt: 'liquid restaking token' };
+    const aliases: Record<string, string> = { pbs: 'proposer builder separation', blob: '4844 data availability', aa: 'account abstraction 4337', verkle: 'stateless witness', mev: 'builder relay proposer', eof: 'pectra bytecode format', lst: 'liquid staking token', lrt: 'liquid restaking token', yt: '以太坊 yi tai fang', gx: '共识 gong shi', zx: '执行 zhi xing' };
     const q = q0 ? `${q0} ${(aliases[q0] || '')}`.trim() : '';
     let result = !q ? base : base.filter((c) => {
       const blob = [
@@ -208,7 +216,7 @@ export function CurriculumPage() {
   };
 
   const submitAssessment = (chapterId: string, onlyWrong = false) => {
-    const assessment = chapterAssessments.find((a) => a.chapterId === chapterId);
+    const assessment = cmsAssessments.find((a: any) => a.chapterId === chapterId);
     if (!assessment) return;
     const prev = chapterResults[chapterId] as any;
     const user = answers[chapterId] || {};
@@ -588,7 +596,7 @@ export function CurriculumPage() {
       </section>
 
       {chapters.slice(0, visibleCount).map((chapter, idx) => {
-        const assessment = chapterAssessments.find((a) => a.chapterId === chapter.id);
+        const assessment = cmsAssessments.find((a: any) => a.chapterId === chapter.id);
         return (
           <section key={chapter.id} id={chapter.id} className="card">
             <div className="accordion-header">
