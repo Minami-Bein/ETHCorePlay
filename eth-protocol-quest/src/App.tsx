@@ -8,6 +8,7 @@ import { GlossaryPage } from './pages/GlossaryPage';
 import { CurriculumPage } from './pages/CurriculumPage';
 import { ZonePage } from './pages/ZonePage';
 import { PlotPage } from './pages/PlotPage';
+import { SearchPage } from './pages/SearchPage';
 
 export function App() {
   const [themeMode] = useState<'system' | 'light' | 'dark'>(() => (localStorage.getItem('epq_theme_mode') as any) || 'system');
@@ -40,6 +41,7 @@ export function App() {
             <Link to="/progress">总览</Link>
             <Link to="/curriculum">课程</Link>
             <Link to="/glossary">术语</Link>
+            <Link to="/search">搜索</Link>
           </nav>
         </div>
       </header>
@@ -52,6 +54,7 @@ export function App() {
         <Route path="/glossary" element={<GlossaryPage />} />
         <Route path="/zone/:zoneKey" element={<ZonePage />} />
         <Route path="/plot/:id" element={<PlotPage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
