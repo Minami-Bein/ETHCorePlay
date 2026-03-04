@@ -17,6 +17,7 @@ export function HomePage() {
     lastVisitedChapter,
     lastVisitedSection,
     studyMinutes,
+    studyHistory,
     curriculumDone,
     onboardingTasks,
     setOnboardingTask
@@ -57,6 +58,53 @@ export function HomePage() {
     if (!badges.includes('Wrongbook Warrior')) return `错题累计到 10 条可解锁 Wrongbook Warrior（当前 ${wrongBook.length}）`;
     return '你已完成主要基础徽章，下一步建议冲击核心贡献路线。';
   })();
+
+
+  const wrongClusters = useMemo(() => {
+    const pick = (t: string) => /gas|fee/i.test(t) ? 'Gas' : /final|fork|ghost/i.test(t) ? 'Finality' : /security|reorg|mev|censor/i.test(t) ? 'Security' : 'General';
+    return wrongBook.reduce((acc: Record<string, number>, w) => {
+      const k = pick(`${w.prompt} ${w.explanation}`);
+      acc[k] = (acc[k] || 0) + 1;
+      return acc;
+    }, {});
+  }, [wrongBook]);
+
+  const stability = useMemo(() => {
+    const vals = Object.values(chapterResults).map((r: any) => (r.history || []).slice(-3)).filter((h: number[]) => h.length >= 2);
+    if (!vals.length) return 100;
+    const vol = vals.map((h: number[]) => Math.abs(h[h.length - 1] - h[0]));
+    const avgVol = vol.reduce((a, b) => a + b, 0) / vol.length;
+    return Math.max(0, Math.round((1 - avgVol) * 100));
+  }, [chapterResults]);
+
+  const recentStudyMins = useMemo(() => {
+    const now = Date.now();
+    let mins = 0;
+    Object.values(studyHistory || {}).forEach((arr: any) => {
+      arr.forEach((e: any) => {
+        if (now - e.ts < 1000 * 60 * 60 * 24 * 3 && e.action === 'study_minutes') {
+          const m = Number(String(e.detail || '').replace(/[^0-9-]/g, ''));
+          mins += isNaN(m) ? 0 : Math.max(0, m);
+        }
+      });
+    });
+    return mins;
+  }, [studyHistory]);
+
+  const recommendationV2 = useMemo(() => {
+    const topCluster = Object.entries(wrongClusters).sort((a, b) => b[1] - a[1])[0]?.[0] || 'General';
+    if (wrongBook.length >= 6) {
+      return { action: `先做${topCluster}错题复盘包`, eta: 25, score: 92, reason: `错题池 ${wrongBook.length} 条，优先止损提升通过率。` };
+    }
+    if (stability < 65) {
+      return { action: '做一次错题回放 + 复测稳定性', eta: 30, score: 86, reason: `当前稳定度 ${stability}，建议先降波动。` };
+    }
+    if (recentStudyMins < 60) {
+      return { action: '补一次 45 分钟主线学习', eta: 45, score: 78, reason: `近3天学习时长 ${recentStudyMins} 分钟，建议恢复节奏。` };
+    }
+    const next = allChapters.find((c) => !curriculumDone[c.id]);
+    return { action: next ? `推进下一章：${next.title}` : '进入贡献实战章节', eta: 35, score: 80, reason: '当前状态适合继续推进主线。' };
+  }, [wrongBook.length, wrongClusters, stability, recentStudyMins, allChapters, curriculumDone]);
 
   const smartRecommendation = (() => {
     if (wrongBook.length >= 5) return '优先做错题回放：先处理最近 5 条错题，再进行一次章节复测。';
@@ -146,6 +194,8 @@ export function HomePage() {
       <div className="card card-hover">
         <h3 className="section-title">今日智能建议</h3>
         <div className="notice">{smartRecommendation}</div>
+        <p style={{ marginTop: 8 }}><strong>推荐引擎 v2：</strong>{recommendationV2.action}</p>
+        <p className="subtle">预计耗时：{recommendationV2.eta} 分钟 · 收益分：{recommendationV2.score} · {recommendationV2.reason}</p>
         <p style={{ marginTop: 10 }}><strong>下一个徽章目标：</strong>{nextBadgeHint}</p>
       </div>
 

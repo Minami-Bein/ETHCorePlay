@@ -27,7 +27,15 @@
   {
     "term": "Finality",
     "desc": "区块达到经济上强不可逆（回滚概率极低）的状态。",
-    "status": "Mainnet"
+    "status": "Mainnet",
+    "relatedTerms": [
+      "Checkpoint",
+      "LMD-GHOST"
+    ],
+    "relatedChapters": [
+      "cl-core",
+      "cl-deep-forkchoice-finality"
+    ]
   },
   {
     "term": "LMD-GHOST",
@@ -37,7 +45,14 @@
   {
     "term": "Engine API",
     "desc": "EL 与 CL 的标准接口。",
-    "status": "General"
+    "status": "General",
+    "relatedTerms": [
+      "ForkchoiceUpdated",
+      "Execution Payload"
+    ],
+    "relatedChapters": [
+      "engine-api-core"
+    ]
   },
   {
     "term": "EIP",
@@ -112,22 +127,55 @@
   {
     "term": "PBS",
     "desc": "Proposer-Builder Separation：提议者与构建者分离方向，生态中已有相关实践。",
-    "status": "Ecosystem"
+    "status": "Ecosystem",
+    "relatedTerms": [
+      "MEV",
+      "Inclusion List",
+      "Builder Relay"
+    ],
+    "relatedChapters": [
+      "pbs-inclusion-censorship-deep",
+      "mev-builder-relay-deep"
+    ]
   },
   {
     "term": "Inclusion List",
     "desc": "提升交易最低可包含性的机制设计，仍在持续讨论与演进。",
-    "status": "Research"
+    "status": "Research",
+    "relatedTerms": [
+      "PBS",
+      "MEV",
+      "Censorship Resistance"
+    ],
+    "relatedChapters": [
+      "pbs-inclusion-censorship-deep"
+    ]
   },
   {
     "term": "MEV",
     "desc": "Maximal Extractable Value，可从交易排序/打包中提取的价值。",
-    "status": "General"
+    "status": "General",
+    "relatedTerms": [
+      "PBS",
+      "Mempool/Txpool",
+      "Builder Relay"
+    ],
+    "relatedChapters": [
+      "mev-builder-relay-deep",
+      "mempool-private-orderflow-deep"
+    ]
   },
   {
     "term": "Blob (EIP-4844)",
     "desc": "为 DA 场景提供更高性价比数据承载的对象。",
-    "status": "General"
+    "status": "General",
+    "relatedTerms": [
+      "Data Availability (DA)",
+      "Blob Gas Price"
+    ],
+    "relatedChapters": [
+      "eip4844-da-economics-deep"
+    ]
   },
   {
     "term": "Data Availability (DA)",

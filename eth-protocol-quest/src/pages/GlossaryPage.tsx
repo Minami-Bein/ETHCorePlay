@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { loadCmsJson } from '../services/cms';
 
 const statusOrder: GlossaryStatus[] = ['Mainnet', 'Ecosystem', 'Roadmap', 'Research', 'Concept', 'Depends', 'General'];
+const chapterHref = (id: string) => `/curriculum#${id}`;
 
 export function GlossaryPage() {
   const [q, setQ] = useState('');
@@ -72,6 +73,16 @@ export function GlossaryPage() {
                     <span className={`status-badge ${String(g.status || 'General').toLowerCase()}`}>{g.status || 'General'}</span>
                   </div>
                   <small>{g.desc}</small>
+                  {!!g.relatedTerms?.length && (
+                    <div className="chips" style={{ marginTop: 6 }}>
+                      {g.relatedTerms.map((t: string) => <span key={t} className="chip">↔ {t}</span>)}
+                    </div>
+                  )}
+                  {!!g.relatedChapters?.length && (
+                    <div className="quick-links" style={{ marginTop: 6 }}>
+                      {g.relatedChapters.map((cid: string) => <Link key={cid} to={chapterHref(cid)} className="btn btn-ghost" style={{ padding: '4px 10px' }}>相关章节：{cid}</Link>)}
+                    </div>
+                  )}
                 </article>
               ))}
             </div>

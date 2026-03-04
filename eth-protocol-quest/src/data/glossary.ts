@@ -1,6 +1,6 @@
 export type GlossaryStatus = 'Mainnet' | 'Ecosystem' | 'Roadmap' | 'Research' | 'Concept' | 'Depends' | 'General';
 
-export type GlossaryItem = { term: string; desc: string; status?: GlossaryStatus };
+export type GlossaryItem = { term: string; desc: string; status?: GlossaryStatus; relatedTerms?: string[]; relatedChapters?: string[] };
 
 export const glossary: GlossaryItem[] = [
   { term: 'EL (Execution Layer)', desc: '执行交易并维护账户状态的层。', status: 'General' },
@@ -8,9 +8,9 @@ export const glossary: GlossaryItem[] = [
   { term: 'EVM', desc: '以太坊虚拟机，确定性执行环境。', status: 'General' },
   { term: 'Nonce', desc: '账户交易序号，用于防重放并保持顺序。', status: 'General' },
   { term: 'Mempool/Txpool', desc: '节点暂存待打包交易的内存池。', status: 'General' },
-  { term: 'Finality', desc: '区块达到经济上强不可逆（回滚概率极低）的状态。', status: 'Mainnet' },
+  { term: 'Finality', desc: '区块达到经济上强不可逆（回滚概率极低）的状态。', status: 'Mainnet', relatedTerms: ['Checkpoint', 'LMD-GHOST'], relatedChapters: ['cl-core', 'cl-deep-forkchoice-finality'] },
   { term: 'LMD-GHOST', desc: '以太坊共识中的链头选择规则之一。', status: 'General' },
-  { term: 'Engine API', desc: 'EL 与 CL 的标准接口。', status: 'General' },
+  { term: 'Engine API', desc: 'EL 与 CL 的标准接口。', status: 'General', relatedTerms: ['ForkchoiceUpdated', 'Execution Payload'], relatedChapters: ['engine-api-core'] },
   { term: 'EIP', desc: 'Ethereum Improvement Proposal，协议改进提案。', status: 'General' },
   { term: 'Slashing', desc: '对验证者恶意行为的罚没机制。', status: 'General' },
   { term: 'Reorg', desc: '链头从一个分支切换到另一分支。', status: 'General' },
@@ -27,10 +27,10 @@ export const glossary: GlossaryItem[] = [
   { term: 'SSTORE', desc: 'EVM 中写入存储的关键操作，gas 开销常较高。', status: 'General' },
   { term: 'ForkchoiceUpdated', desc: 'Engine API 中 forkchoiceUpdated 系列调用，用于 CL 向 EL 同步链头选择。', status: 'Mainnet' },
 
-  { term: 'PBS', desc: 'Proposer-Builder Separation：提议者与构建者分离方向，生态中已有相关实践。', status: 'Ecosystem' },
-  { term: 'Inclusion List', desc: '提升交易最低可包含性的机制设计，仍在持续讨论与演进。', status: 'Research' },
-  { term: 'MEV', desc: 'Maximal Extractable Value，可从交易排序/打包中提取的价值。', status: 'General' },
-  { term: 'Blob (EIP-4844)', desc: '为 DA 场景提供更高性价比数据承载的对象。', status: 'General' },
+  { term: 'PBS', desc: 'Proposer-Builder Separation：提议者与构建者分离方向，生态中已有相关实践。', status: 'Ecosystem', relatedTerms: ['MEV', 'Inclusion List', 'Builder Relay'], relatedChapters: ['pbs-inclusion-censorship-deep', 'mev-builder-relay-deep'] },
+  { term: 'Inclusion List', desc: '提升交易最低可包含性的机制设计，仍在持续讨论与演进。', status: 'Research', relatedTerms: ['PBS', 'MEV', 'Censorship Resistance'], relatedChapters: ['pbs-inclusion-censorship-deep'] },
+  { term: 'MEV', desc: 'Maximal Extractable Value，可从交易排序/打包中提取的价值。', status: 'General', relatedTerms: ['PBS', 'Mempool/Txpool', 'Builder Relay'], relatedChapters: ['mev-builder-relay-deep', 'mempool-private-orderflow-deep'] },
+  { term: 'Blob (EIP-4844)', desc: '为 DA 场景提供更高性价比数据承载的对象。', status: 'General', relatedTerms: ['Data Availability (DA)', 'Blob Gas Price'], relatedChapters: ['eip4844-da-economics-deep'] },
   { term: 'Data Availability (DA)', desc: '保证状态转移验证所需数据可获取性的属性。', status: 'General' },
   { term: 'Verkle Tree', desc: '用于优化状态证明体积与验证效率的承诺结构方向，尚未主网全面切换。', status: 'Research' },
   { term: 'Stateless Ethereum', desc: '通过 witness 降低对完整状态依赖的方向，仍处于推进阶段。', status: 'Research' },
