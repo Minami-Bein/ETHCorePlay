@@ -760,3 +760,62 @@ body[data-theme='dark'] .status-badge.general { color: #c0c8d9; }
   outline: 2px solid var(--border-focus);
   outline-offset: 2px;
 }
+
+
+/* Global UI polish */
+.container {
+  animation: fadeInPage .28s var(--ease-standard);
+}
+
+@keyframes fadeInPage {
+  from { opacity: .0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.topbar {
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg-surface) 78%, transparent);
+}
+
+.brand {
+  letter-spacing: .2px;
+  font-weight: 700;
+}
+
+.topbar nav a {
+  border: 1px solid transparent;
+}
+
+.topbar nav a:hover {
+  border-color: var(--border-subtle);
+}
+
+.card {
+  box-shadow: var(--shadow-sm);
+}
+
+.card-hover:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.btn {
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+}
+
+.btn-ghost {
+  background: color-mix(in srgb, var(--bg-surface) 88%, var(--bg-elevated));
+}
+
+h1, h2 {
+  letter-spacing: -0.01em;
+}
+
+.level {
+  border: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, var(--bg-surface) 92%, var(--bg-elevated));
+}
+
+.notice {
+  border: 1px solid color-mix(in srgb, var(--brand-primary) 25%, var(--border-default));
+}
