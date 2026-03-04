@@ -41,7 +41,8 @@ export function GlossaryPage() {
       <Link to="/">← 首页</Link>
       <h2>协议术语花名册</h2>
       <section className="card card-hover">
-        <input
+        <label htmlFor="glossary-search" className="subtle">搜索术语</label>
+        <input id="glossary-search" aria-label="搜索术语"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="搜索术语：如 blob / pbs / paymaster / finality"
@@ -50,7 +51,7 @@ export function GlossaryPage() {
         <div className="chips" style={{ marginTop: 8 }}>
           <button className={`chip-btn ${statusFilter === 'All' ? 'on' : ''}`} onClick={() => setStatusFilter('All')}>All</button>
           {statusOrder.map((s) => (
-            <button key={s} className={`chip-btn ${statusFilter === s ? 'on' : ''}`} onClick={() => setStatusFilter(s)}>{s}</button>
+            <button key={s} aria-pressed={statusFilter === s} className={`chip-btn ${statusFilter === s ? 'on' : ''}`} onClick={() => setStatusFilter(s)}>{s}</button>
           ))}
         </div>
         <small className="subtle">当前术语：{filtered.length}/{glossary.length}</small>

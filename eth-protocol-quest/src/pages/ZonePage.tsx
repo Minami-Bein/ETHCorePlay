@@ -66,19 +66,23 @@ export function ZonePage() {
       <section className="card card-hover" style={{ position: 'sticky', top: 72, zIndex: 20 }}>
         <h3>Zone Toolbar</h3>
         <div className="filter-row">
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search plots" style={{ padding: 8, borderRadius: 10, border: '1px solid var(--border-default)' }} />
-          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
+          <label htmlFor="zone-search" className="subtle">搜索地块</label>
+          <input id="zone-search" aria-label="搜索地块" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search plots" style={{ padding: 8, borderRadius: 10, border: '1px solid var(--border-default)' }} />
+          <label htmlFor="zone-difficulty" className="subtle">难度筛选</label>
+          <select id="zone-difficulty" aria-label="难度筛选" value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
             <option value="all">Difficulty: All</option>
             <option value="1-2">Difficulty: 1-2</option>
             <option value="3-5">Difficulty: 3-5</option>
           </select>
           <label><input type="checkbox" checked={hasLab} onChange={(e) => setHasLab(e.target.checked)} /> Has Lab</label>
-          <select value={sort} onChange={(e) => setSort(e.target.value as any)}>
+          <label htmlFor="zone-sort" className="subtle">排序</label>
+          <select id="zone-sort" aria-label="排序" value={sort} onChange={(e) => setSort(e.target.value as any)}>
             <option value="recommended">Sort: Recommended</option>
             <option value="difficulty">Sort: Difficulty</option>
             <option value="time">Sort: Time</option>
           </select>
-          <select value={view} onChange={(e) => setView(e.target.value as any)}>
+          <label htmlFor="zone-view" className="subtle">视图切换</label>
+          <select id="zone-view" aria-label="视图切换" value={view} onChange={(e) => setView(e.target.value as any)}>
             <option value="grid">View: Grid</option>
             <option value="map-lite">View: Map-lite</option>
           </select>

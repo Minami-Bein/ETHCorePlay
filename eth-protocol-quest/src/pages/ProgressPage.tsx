@@ -75,7 +75,8 @@ export function ProgressPage() {
       <section className="card card-hover">
         <div className="card-title-row"><h3 style={{ margin: 0 }}>云端同步（账号体系）</h3>{!cloudEnabled && <span className="meta-pill">未配置 Supabase</span>}</div>
         <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-          <input placeholder="email for magic link" value={email} onChange={(e)=>setEmail(e.target.value)} style={{ padding:8, borderRadius:10, border:'1px solid var(--border-default)' }} />
+          <label htmlFor="sync-email" className="subtle">同步账号邮箱</label>
+          <input id="sync-email" aria-label="同步账号邮箱" placeholder="email for magic link" value={email} onChange={(e)=>setEmail(e.target.value)} style={{ padding:8, borderRadius:10, border:'1px solid var(--border-default)' }} />
           <button className="btn btn-ghost" onClick={() => signInWithOtp(email).then(()=>alert('Magic link sent')).catch((e)=>alert(String(e)))}>登录</button>
           <button className="btn" onClick={() => syncPushRobust(useProgressStore.getState()).then((r:any)=>alert(r.ok?'已推送云端':'已加入重试队列')).catch((e)=>alert(String(e)))}>推送云端</button>
           <button className="btn btn-ghost" onClick={async () => { const merged = await syncPullMerge(useProgressStore.getState()); localStorage.setItem('epq-progress-v2', JSON.stringify({ state: merged, version:2 })); alert('已拉取并合并，请刷新页面'); }}>拉取云端</button>
@@ -110,7 +111,7 @@ export function ProgressPage() {
                   {nodes.map((n) => (
                     <li key={n.id} style={{ marginBottom: 6 }}>
                       <span>{n.title}</span>
-                      <select value={n.status} onChange={(e) => setKnowledgeStatus(n.id, e.target.value as any)} style={{ marginLeft: 8 }}>
+                      <label htmlFor={`status-${n.id}`} className="sr-only">状态</label><select id={`status-${n.id}`} aria-label={`${n.title} 学习状态`} value={n.status} onChange={(e) => setKnowledgeStatus(n.id, e.target.value as any)} style={{ marginLeft: 8 }}>
                         <option value="todo">todo</option>
                         <option value="learning">learning</option>
                         <option value="done">done</option>

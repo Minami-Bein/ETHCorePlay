@@ -34,7 +34,7 @@ export function SVGRenderer() {
           ))}
 
           {nodes.map((n) => (
-            <g key={n.id} onMouseEnter={() => setHover(n)} onMouseLeave={() => setHover(null)}>
+            <g key={n.id} tabIndex={0} role="button" aria-label={`打开 ${n.name}`} onFocus={() => setHover(n)} onBlur={() => setHover(null)} onKeyDown={(e)=>{ if(e.key==='Enter'||e.key===' '){ window.location.hash=`/plot/${n.id}`; } }} onMouseEnter={() => setHover(n)} onMouseLeave={() => setHover(null)}>
               <circle cx={n.x} cy={n.y} r={lod === 'zone' ? 26 : 18} fill="var(--brand-primary)" opacity="0.85" />
               {(lod !== 'zone' || hover?.id === n.id) && (
                 <text x={n.x} y={n.y + 34} textAnchor="middle" fontSize="12" fill="var(--text-secondary)">{n.name}</text>

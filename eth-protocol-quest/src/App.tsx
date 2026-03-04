@@ -49,7 +49,7 @@ export function App() {
           </nav>
         </div>
       </header>
-      <main id="main-content">
+      <main id="main-content" role="main" tabIndex={-1}>
       <Suspense fallback={<div className="container"><div className="card">加载中...</div></div>}><Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/map" element={<MapPage />} />
