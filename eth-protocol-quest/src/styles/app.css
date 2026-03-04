@@ -819,3 +819,64 @@ h1, h2 {
 .notice {
   border: 1px solid color-mix(in srgb, var(--brand-primary) 25%, var(--border-default));
 }
+
+
+/* UI micro-polish v2 */
+.hero .card,
+.card-hover {
+  transition: transform var(--motion-base) var(--ease-standard), box-shadow var(--motion-base) var(--ease-standard), border-color var(--motion-base) var(--ease-standard);
+}
+
+.card-hover:hover {
+  border-color: color-mix(in srgb, var(--brand-primary) 28%, var(--border-default));
+}
+
+.section-title {
+  font-weight: 700;
+}
+
+.section-title::after {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  margin-left: 8px;
+  vertical-align: middle;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-garden));
+  border-radius: 999px;
+}
+
+.quick-links {
+  row-gap: 10px;
+}
+
+input, select, textarea {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  border-color: var(--border-focus) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 22%, transparent);
+}
+
+.plot-card .stat-chip {
+  border-color: color-mix(in srgb, var(--brand-primary) 18%, var(--border-default));
+}
+
+.badge-wall .badge-item {
+  position: relative;
+}
+
+.badge-wall .badge-item::after {
+  content: '';
+  position: absolute;
+  inset: auto 10px 0 10px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--brand-primary) 45%, var(--brand-garden)), transparent);
+  opacity: .65;
+}
+
+svg {
+  border: 1px solid color-mix(in srgb, var(--border-default) 70%, transparent);
+}
