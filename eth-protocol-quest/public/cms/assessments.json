@@ -55,7 +55,7 @@
           "节点已同步"
         ],
         "answerIndex": 1,
-        "explanation": "Finality 是强不可逆保障。"
+        "explanation": "Finality 是经济上强不可逆保障。"
       },
       {
         "id": "cl-a2",
@@ -143,7 +143,7 @@
       },
       {
         "id": "tx-a2",
-        "prompt": "“已打包”是否等于最终不可逆？",
+        "prompt": "“已打包”是否等于经济上最终不可逆？",
         "options": [
           "是",
           "否"
@@ -387,7 +387,7 @@
           "只改钱包"
         ],
         "answerIndex": 0,
-        "explanation": "主流 rollup 模式。"
+        "explanation": "常见 rollup 模式（不同方案安全模型有差异）。"
       },
       {
         "id": "l2-a2",

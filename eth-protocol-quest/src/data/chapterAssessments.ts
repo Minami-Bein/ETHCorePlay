@@ -26,7 +26,7 @@ export const chapterAssessments: ChapterAssessment[] = [
     chapterId: 'cl-core',
     passThreshold: 0.7,
     questions: [
-      { id: 'cl-a1', prompt: 'Finality 表示？', options: ['刚打包', '几乎不可逆', '钱包已签名', '节点已同步'], answerIndex: 1, explanation: 'Finality 是强不可逆保障。' },
+      { id: 'cl-a1', prompt: 'Finality 表示？', options: ['刚打包', '几乎不可逆', '钱包已签名', '节点已同步'], answerIndex: 1, explanation: 'Finality 是经济上强不可逆保障。' },
       { id: 'cl-a2', prompt: 'Fork choice 解决什么问题？', options: ['手续费计算', '链头选择', '密钥管理', 'RPC 限流'], answerIndex: 1, explanation: '核心是链头选择。' },
       { id: 'cl-a3', prompt: 'Slashing 用于？', options: ['奖励恶意行为', '惩罚有害行为', '增加区块容量', '替代共识'], answerIndex: 1, explanation: '经济惩罚维护安全。' }
     ]
@@ -45,7 +45,7 @@ export const chapterAssessments: ChapterAssessment[] = [
     passThreshold: 0.7,
     questions: [
       { id: 'tx-a1', prompt: '交易广播后通常先进入？', options: ['mempool', 'IPFS', '冷钱包', 'DNS'], answerIndex: 0, explanation: '先入 mempool。' },
-      { id: 'tx-a2', prompt: '“已打包”是否等于最终不可逆？', options: ['是', '否'], answerIndex: 1, explanation: '需最终性确认。' },
+      { id: 'tx-a2', prompt: '“已打包”是否等于经济上最终不可逆？', options: ['是', '否'], answerIndex: 1, explanation: '需最终性确认。' },
       { id: 'tx-a3', prompt: '同 nonce 替换交易通常需？', options: ['更高费率', '更低费率', '更短 data', '不同 chain'], answerIndex: 0, explanation: '更高费率常用于替换。' }
     ]
   },
@@ -98,7 +98,7 @@ export const chapterAssessments: ChapterAssessment[] = [
     chapterId: 'l2-da-core',
     passThreshold: 0.7,
     questions: [
-      { id: 'l2-a1', prompt: 'Rollup 的核心是？', options: ['L2 执行 + L1 结算', '完全脱离 L1', '只改前端', '只改钱包'], answerIndex: 0, explanation: '主流 rollup 模式。' },
+      { id: 'l2-a1', prompt: 'Rollup 的核心是？', options: ['L2 执行 + L1 结算', '完全脱离 L1', '只改前端', '只改钱包'], answerIndex: 0, explanation: '常见 rollup 模式（不同方案安全模型有差异）。' },
       { id: 'l2-a2', prompt: 'DA 的重要性在于？', options: ['提高头像清晰度', '保障状态可验证性', '替代签名', '减少节点数量'], answerIndex: 1, explanation: '无 DA 难以独立验证。' },
       { id: 'l2-a3', prompt: '跨域消息通常具备？', options: ['同步即时', '异步与延迟', '免费无限', '无需验证'], answerIndex: 1, explanation: '跨域多数是异步流程。' }
     ]
