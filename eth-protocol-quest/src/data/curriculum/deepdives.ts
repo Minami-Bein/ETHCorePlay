@@ -315,14 +315,14 @@ export const deepDiveChapters: Chapter[] = [
         heading: '细粒度小节：为什么需要从 MPT 走向 Verkle',
         points: [
           '状态规模增长导致证明体积与验证开销持续上升。',
-          'Verkle 通过向量承诺压缩证明大小并提升验证效率。',
+          'Verkle（研究/路线方向）通过向量承诺压缩证明大小并提升验证效率。',
           '目标是降低节点同步与状态访问负担。'
         ]
       },
       {
         heading: '细粒度小节：Stateless Ethereum 核心思路',
         points: [
-          '把执行所需 witness 随区块/交易携带，减少节点对完整状态的依赖。',
+          '把执行所需 witness 随区块/交易携带，减少节点对完整状态依赖（当前仍属推进方向）。',
           '节点可在更低存储负担下验证执行正确性。',
           '关键挑战在 witness 生成、传播与验证成本平衡。'
         ]
@@ -410,7 +410,7 @@ export const deepDiveChapters: Chapter[] = [
       {
         heading: '细粒度小节：PBS 的目标与现实约束',
         points: [
-          'PBS 通过角色分离提升构建效率并降低部分中心化压力。',
+          'PBS（路线方向/生态实践）通过角色分离提升构建效率并缓解部分中心化压力。',
           '现实中仍需关注 relay 集中与信息不对称风险。',
           '需要把可用性与公平性一起纳入评估。'
         ]
@@ -418,7 +418,7 @@ export const deepDiveChapters: Chapter[] = [
       {
         heading: '细粒度小节：Inclusion List 的治理价值',
         points: [
-          'Inclusion list 提升“最低交易可包含性”保障。',
+          'Inclusion list（研究/路线方向）旨在提升“最低交易可包含性”保障。',
           '机制设计需平衡强制性、复杂度与滥用防护。',
           '与 mempool 策略、提议时隙约束存在耦合。'
         ]
