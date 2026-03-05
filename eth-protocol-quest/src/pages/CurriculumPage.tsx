@@ -287,7 +287,7 @@ export function CurriculumPage() {
     if (wrongBook.length >= 10) awardBadge('Wrongbook Warrior');
   }, [chapterResults, wrongBook.length, awardBadge]);
 
-  const chapterQuality = (chapterId: string) => {
+  function chapterQuality(chapterId: string) {
     const r = chapterResults[chapterId] as any;
     if (!r) return { score: 0, stability: 0, recencyWrong: 0 };
     const hist = (r.history || []).slice(-3) as number[];
@@ -296,7 +296,7 @@ export function CurriculumPage() {
     const recencyWrong = (r.wrongIds || []).length;
     const stability = Math.max(0, Math.round((1 - vol) * 100) - recencyWrong * 5);
     return { score: Math.round(avg * 100), stability, recencyWrong };
-  };
+  }
 
   useEffect(() => {
     const foundationDone = ['el-core', 'cl-core', 'evm-core', 'tx-lifecycle-core'].every((id) => done[id]);

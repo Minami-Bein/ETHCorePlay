@@ -56,8 +56,10 @@ export function ProgressPage() {
     <main className="container">
       <Link to="/">← 首页</Link>
       <h2>学习进度总览</h2>
+      <p className="subtle">你的学习状态、错题分布与知识图谱都在这里统一查看。</p>
 
       <section className="card card-hover" id="progress-share-card">
+        <div className="card-title-row"><h3 style={{ margin: 0 }}>核心指标</h3><span className="meta-pill">Progress Snapshot</span></div>
         <div className="kpi-grid">
           <div className="kpi"><small>总 XP</small><br/><b>{xp}</b></div>
           <div className="kpi"><small>已通关</small><br/><b>{doneCount} 关</b></div>
