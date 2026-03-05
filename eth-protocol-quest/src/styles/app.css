@@ -880,3 +880,32 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 svg {
   border: 1px solid color-mix(in srgb, var(--border-default) 70%, transparent);
 }
+
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.knowledge-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-3);
+  background: color-mix(in srgb, var(--bg-surface) 90%, var(--bg-elevated));
+  padding: 10px;
+}
+
+.knowledge-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.knowledge-item select {
+  min-width: 96px;
+  border-radius: 8px;
+  border: 1px solid var(--border-default);
+  padding: 2px 6px;
+}
