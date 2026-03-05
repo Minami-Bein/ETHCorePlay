@@ -10,6 +10,8 @@ export function ProgressPage() {
   const { xp, completed, wrongBook, clearWrongBook, knowledgeMap, setKnowledgeStatus } = storeState;
   const [email, setEmail] = useState('');
   const [syncMsg, setSyncMsg] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'todo' | 'learning' | 'done'>('all');
+  const [collapsedDomain, setCollapsedDomain] = useState<Record<string, boolean>>({});
 
   const doneCount = useMemo(() => Object.values(completed).filter(Boolean).length, [completed]);
   const totalNodes = knowledgeMap.length || 1;
