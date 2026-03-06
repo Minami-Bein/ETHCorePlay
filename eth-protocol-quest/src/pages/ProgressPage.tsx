@@ -20,6 +20,7 @@ export function ProgressPage() {
   const totalNodes = knowledgeMap.length || 1;
   const doneNodes = knowledgeMap.filter((n) => n.status === 'done').length;
   const completionPct = Math.round((doneNodes / totalNodes) * 100);
+  const growthStage = completionPct < 25 ? 'Seed' : completionPct < 50 ? 'Sprout' : completionPct < 75 ? 'Branch' : 'Bloom';
 
   const wrongClusters = useMemo(() => {
     const pick = (t: string) => /gas|fee/i.test(t) ? 'Gas' : /final|fork|ghost/i.test(t) ? 'Finality' : /security|reorg|mev|censor/i.test(t) ? 'Security' : 'General';
@@ -79,13 +80,16 @@ export function ProgressPage() {
       <section className="card card-hover" id="progress-share-card">
         <div className="card-title-row"><h3 style={{ margin: 0 }}>核心指标</h3><span className="meta-pill">Progress Snapshot</span></div>
         <div className="kpi-grid">
-          <div className="kpi"><small>总 XP</small><br/><b>{xp}</b></div>
-          <div className="kpi"><small>已通关</small><br/><b>{doneCount} 关</b></div>
+          <div className="kpi"><small>Garden Stage</small><br/><b>{growthStage}</b></div>
+          <div className="kpi"><small>成长完成度</small><br/><b>{completionPct}%</b></div>
           <div className="kpi"><small>错题数量</small><br/><b>{wrongBook.length}</b></div>
         </div>
         <div style={{ marginTop: 10 }}>
-          <small>知识图谱完成度：{doneNodes}/{totalNodes}（{completionPct}%）</small>
-          <div className="progress-rail" style={{ marginTop: 6 }}><div className="progress-fill" style={{ width: `${completionPct}%` }} /></div>
+          <small>成长轨迹：Seed → Sprout → Branch → Bloom</small>
+          <div className="growth-track" style={{ marginTop: 8 }}>
+            {['Seed','Sprout','Branch','Bloom'].map((g) => <span key={g} className={`growth-chip ${g===growthStage?'on':''}`}>{g}</span>)}
+          </div>
+          <div className="progress-rail" style={{ marginTop: 8 }}><div className="progress-fill" style={{ width: `${completionPct}%` }} /></div>
         </div>
       </section>
 

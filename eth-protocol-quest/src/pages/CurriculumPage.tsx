@@ -30,6 +30,15 @@ function chapterDomain(chapterId: string): 'EL' | 'CL' | 'EVM' | 'Networking' | 
   return 'Client';
 }
 
+
+function splitLearningModules(chapter: any) {
+  const concept = chapter.sections?.slice(0, 1) || [];
+  const mechanism = chapter.sections?.slice(1, 3) || [];
+  const example = chapter.practice?.slice(0, 1) || [];
+  const pitfall = chapter.pitfalls || [];
+  return { concept, mechanism, example, pitfall };
+}
+
 export function CurriculumPage() {
   const lang = getLang();
   const [onlyPending, setOnlyPending] = useState(false);
@@ -699,6 +708,17 @@ export function CurriculumPage() {
                   <li key={sec.heading}>{sec.heading}：{sec.points[0]}</li>
                 ))}
               </ul>
+            </div>
+
+            <div className="module-grid" style={{ marginTop: 10 }}>
+              {(() => { const m = splitLearningModules(chapter); return (
+                <>
+                  <article className="module-card"><strong>Concept</strong><ul>{m.concept.map((sec:any)=><li key={sec.heading}>{sec.heading}：{sec.points?.[0]}</li>)}</ul></article>
+                  <article className="module-card"><strong>Mechanism</strong><ul>{m.mechanism.map((sec:any)=><li key={sec.heading}>{sec.heading}：{sec.points?.[0]}</li>)}</ul></article>
+                  <article className="module-card"><strong>Example</strong><ul>{m.example.map((ex:any)=><li key={ex.title}>{ex.title}：{ex.steps?.[0]}</li>)}</ul></article>
+                  <article className="module-card"><strong>Pitfall</strong><ul>{m.pitfall.slice(0,3).map((p:any)=><li key={p}>{p}</li>)}</ul></article>
+                </>
+              ); })()}
             </div>
 
             {chapter.sections.map((sec, si) => (

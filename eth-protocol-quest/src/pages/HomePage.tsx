@@ -174,22 +174,17 @@ export function HomePage() {
 
         <aside className="card profile-intro-card card-hover">
           <div className="card-title-row">
-            <h3 style={{ margin: 0 }}>关于我 / About Me</h3>
-            <span className="meta-pill">Creator Profile</span>
+            <h3 style={{ margin: 0 }}>协议花园地图入口</h3>
+            <span className="meta-pill">Garden Nodes</span>
           </div>
-
-          <div className="profile-intro-row">
-            <div className="profile-avatar-placeholder" aria-label="头像占位">Avatar</div>
-            <div>
-              <div><strong>XiaoHai67890</strong></div>
-              <small className="subtle">以太坊协议研究成员</small>
-            </div>
-          </div>
-
-          <div className="profile-links">
-            <div className="profile-link-item"><strong>微信：</strong><span className="subtle">XiaoHai4890</span></div>
-            <div className="profile-link-item"><strong>Telegram：</strong><span className="subtle">@XiaoHai489</span></div>
-            <div className="profile-link-item"><strong>X：</strong><span className="subtle">https://x.com/XiaoHai67890</span></div>
+          <p className="subtle" style={{ marginTop: 6 }}>选择任意入口开始漫游，不必按单一路径推进。</p>
+          <div className="garden-node-grid">
+            <Link className="garden-node" to="/curriculum#el-core"><strong>Execution</strong><small>执行语义 / 状态变化</small></Link>
+            <Link className="garden-node" to="/curriculum#cl-core"><strong>Consensus</strong><small>Fork choice / Finality</small></Link>
+            <Link className="garden-node" to="/curriculum#tx-lifecycle-core"><strong>Networking</strong><small>Mempool / Propagation</small></Link>
+            <Link className="garden-node" to="/curriculum#eip-workflow-core"><strong>Governance</strong><small>EIP workflow</small></Link>
+            <Link className="garden-node" to="/curriculum#security-core"><strong>Security</strong><small>威胁模型 / 防护</small></Link>
+            <Link className="garden-node" to="/curriculum#verkle-stateless-deep"><strong>Research</strong><small>Verkle / Stateless</small></Link>
           </div>
         </aside>
 

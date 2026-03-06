@@ -1171,3 +1171,62 @@ body {
 .trail-links .btn {
   border-radius: 12px;
 }
+
+
+.garden-node-grid {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.garden-node {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--bg-surface) 92%, var(--bg-elevated));
+}
+
+.garden-node:hover {
+  border-color: color-mix(in srgb, var(--brand-primary) 30%, var(--border-default));
+  transform: translateY(-1px);
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.module-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--bg-surface) 92%, var(--bg-elevated));
+}
+
+.growth-track {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.growth-chip {
+  border-radius: 999px;
+  border: 1px solid var(--border-default);
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+}
+
+.growth-chip.on {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--brand-garden) 45%, var(--border-default));
+  background: color-mix(in srgb, var(--brand-garden) 18%, var(--bg-surface));
+}
