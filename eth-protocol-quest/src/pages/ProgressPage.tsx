@@ -9,7 +9,16 @@ import { getLang, t } from '../services/i18n';
 
 export function ProgressPage() {
   const storeState = useProgressStore();
-  const { xp, completed, wrongBook, clearWrongBook, knowledgeMap, setKnowledgeStatus, badges, studyHistory } = storeState as any;
+  const {
+    xp = 0,
+    completed = {},
+    wrongBook = [],
+    clearWrongBook = () => {},
+    knowledgeMap = [],
+    setKnowledgeStatus = () => {},
+    badges = [],
+    studyHistory = {}
+  } = (storeState || {}) as any;
   const lang = getLang();
   const [email, setEmail] = useState('');
   const [syncMsg, setSyncMsg] = useState('');
@@ -46,7 +55,13 @@ export function ProgressPage() {
 
   const streakDays = useMemo(() => {
     const daySet = new Set<string>();
-    Object.values(studyHistory || {}).forEach((arr: any) => (arr || []).forEach((e: any) => daySet.add(new Date(e.ts).toDateString())));
+    Object.values(studyHistory || {}).forEach((arr: any) => {
+      if (!Array.isArray(arr)) return;
+      arr.forEach((e: any) => {
+        if (!e?.ts) return;
+        daySet.add(new Date(e.ts).toDateString());
+      });
+    });
     const days = Array.from(daySet).sort((a, b) => +new Date(a) - +new Date(b));
     let best = 0, cur = 0, prev: number | null = null;
     for (const d of days) {
