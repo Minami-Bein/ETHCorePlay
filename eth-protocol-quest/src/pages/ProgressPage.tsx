@@ -11,12 +11,13 @@ export function ProgressPage() {
   const [email, setEmail] = useState('');
   const [syncMsg, setSyncMsg] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'todo' | 'learning' | 'done'>('all');
-  const [collapsedDomain, setCollapsedDomain] = useState<Record<string, boolean>>({});
+  const [highValueOnly, setHighValueOnly] = useState(false);
 
   const doneCount = useMemo(() => Object.values(completed).filter(Boolean).length, [completed]);
   const totalNodes = knowledgeMap.length || 1;
   const doneNodes = knowledgeMap.filter((n) => n.status === 'done').length;
   const completionPct = Math.round((doneNodes / totalNodes) * 100);
+
   const wrongClusters = useMemo(() => {
     const pick = (t: string) => /gas|fee/i.test(t) ? 'Gas' : /final|fork|ghost/i.test(t) ? 'Finality' : /security|reorg|mev|censor/i.test(t) ? 'Security' : 'General';
     return wrongBook.reduce((acc: Record<string, number>, w) => { const k = pick(`${w.prompt} ${w.explanation}`); acc[k] = (acc[k] || 0) + 1; return acc; }, {});
@@ -24,35 +25,31 @@ export function ProgressPage() {
 
   useEffect(() => {
     if (!cloudEnabled) return;
-
-    // on first load: pull & merge
     syncPullMerge(useProgressStore.getState()).then((merged) => {
       localStorage.setItem('epq-progress-v2', JSON.stringify({ state: merged, version: 2 }));
       setSyncMsg('已完成云端拉取合并（刷新后生效）');
     }).catch(() => {});
-
     const runPush = () => {
       syncPushRobust(useProgressStore.getState()).then((r: any) => {
         if (!r.ok) setSyncMsg(`云同步待重试：${r.reason || 'unknown'}`);
       });
     };
-
     const id = setInterval(runPush, 45000);
     const onUnload = () => { runPush(); };
     window.addEventListener('beforeunload', onUnload);
-    return () => {
-      clearInterval(id);
-      window.removeEventListener('beforeunload', onUnload);
-    };
-  }, [cloudEnabled]);
+    return () => { clearInterval(id); window.removeEventListener('beforeunload', onUnload); };
+  }, []);
 
-  const domainGroups = useMemo(() => {
-    return knowledgeMap.reduce<Record<string, typeof knowledgeMap>>((acc, n) => {
-      if (!acc[n.domain]) acc[n.domain] = [];
-      acc[n.domain].push(n);
-      return acc;
-    }, {});
-  }, [knowledgeMap]);
+  const executableCards = useMemo(() => {
+    const rows = knowledgeMap.map((n) => {
+      const clusterBonus = /gas|final|security|mev/i.test(n.title) ? 2 : 0;
+      const score = (n.status === 'todo' ? 3 : n.status === 'learning' ? 2 : 0) + clusterBonus;
+      return { ...n, score };
+    });
+    let out = rows.filter((r) => statusFilter === 'all' ? true : r.status === statusFilter);
+    if (highValueOnly) out = out.filter((r) => r.score >= 3);
+    return out.sort((a, b) => b.score - a.score || Number(a.status === 'done') - Number(b.status === 'done'));
+  }, [knowledgeMap, statusFilter, highValueOnly]);
 
   return (
     <main className="container">
@@ -71,15 +68,35 @@ export function ProgressPage() {
           <small>知识图谱完成度：{doneNodes}/{totalNodes}（{completionPct}%）</small>
           <div className="progress-rail" style={{ marginTop: 6 }}><div className="progress-fill" style={{ width: `${completionPct}%` }} /></div>
         </div>
-        <small className="subtle">同步诊断：{JSON.stringify(getSyncDiagnostics())}</small>
-        {syncMsg && <div className="notice" style={{ marginTop: 8 }}>{syncMsg}</div>}
       </section>
 
+      <section className="card card-hover">
+        <h3 style={{ margin: 0 }}>可执行看板（待处理优先）</h3>
+        <div className="filter-row">
+          <button className={`chip-btn ${statusFilter==='all'?'on':''}`} onClick={() => setStatusFilter('all')}>全部</button>
+          <button className={`chip-btn ${statusFilter==='todo'?'on':''}`} onClick={() => setStatusFilter('todo')}>待处理</button>
+          <button className={`chip-btn ${statusFilter==='learning'?'on':''}`} onClick={() => setStatusFilter('learning')}>进行中</button>
+          <button className={`chip-btn ${statusFilter==='done'?'on':''}`} onClick={() => setStatusFilter('done')}>已完成</button>
+          <button className={`chip-btn ${highValueOnly?'on':''}`} onClick={() => setHighValueOnly(v => !v)}>仅高收益未完成</button>
+        </div>
+        <div className="knowledge-grid">
+          {executableCards.slice(0, 18).map((n) => (
+            <article key={n.id} className="knowledge-card">
+              <div className="card-title-row"><strong>{n.title}</strong><span className="meta-pill">{n.status}</span></div>
+              <small className="subtle">领域：{n.domain} · 收益分：{n.score}</small>
+              <div className="quick-links" style={{ marginTop: 8 }}>
+                <button className="btn btn-ghost" onClick={() => setKnowledgeStatus(n.id, 'learning' as any)}>继续学习</button>
+                <Link className="btn btn-ghost" to="/curriculum">去复测</Link>
+                <Link className="btn btn-ghost" to="/curriculum">去实战</Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <section className="card card-hover">
         <div className="card-title-row"><h3 style={{ margin: 0 }}>云端同步（账号体系）</h3>{!cloudEnabled && <span className="meta-pill">未配置 Supabase</span>}</div>
         <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-          <label htmlFor="sync-email" className="subtle">同步账号邮箱</label>
           <input id="sync-email" aria-label="同步账号邮箱" placeholder="email for magic link" value={email} onChange={(e)=>setEmail(e.target.value)} style={{ padding:8, borderRadius:10, border:'1px solid var(--border-default)' }} />
           <button className="btn btn-ghost" onClick={() => signInWithOtp(email).then(()=>alert('Magic link sent')).catch((e)=>alert(String(e)))}>登录</button>
           <button className="btn" onClick={() => syncPushRobust(useProgressStore.getState()).then((r:any)=>alert(r.ok?'已推送云端':'已加入重试队列')).catch((e)=>alert(String(e)))}>推送云端</button>
@@ -96,39 +113,6 @@ export function ProgressPage() {
           {Object.entries(wrongClusters).map(([k,v]) => <span className="chip" key={k}>{k}: {v}</span>)}
           {Object.keys(wrongClusters).length===0 && <span className="chip">暂无错题聚类</span>}
         </div>
-        <small className="subtle">同步诊断：{JSON.stringify(getSyncDiagnostics())}</small>
-        {syncMsg && <div className="notice" style={{ marginTop: 8 }}>{syncMsg}</div>}
-      </section>
-      <section className="card card-hover">
-        <div className="card-title-row">
-          <h3 style={{ margin: 0 }}>知识图谱（协议全栈）</h3>
-          <span className="meta-pill">可直接修改学习状态</span>
-        </div>
-        <div className="grid">
-          {Object.entries(domainGroups).map(([domain, nodes]) => {
-            const done = nodes.filter((n) => n.status === 'done').length;
-            return (
-              <article key={domain} className="level" style={{ cursor: 'default' }}>
-                <strong>{domain}</strong>
-                <small>完成度：{done}/{nodes.length}</small>
-                <ul>
-                  {nodes.map((n) => (
-                    <li key={n.id} style={{ marginBottom: 6 }}>
-                      <span>{n.title}</span>
-                      <label htmlFor={`status-${n.id}`} className="sr-only">状态</label><select id={`status-${n.id}`} aria-label={`${n.title} 学习状态`} value={n.status} onChange={(e) => setKnowledgeStatus(n.id, e.target.value as any)} style={{ marginLeft: 8 }}>
-                        <option value="todo">todo</option>
-                        <option value="learning">learning</option>
-                        <option value="done">done</option>
-                      </select>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            );
-          })}
-        </div>
-        <small className="subtle">同步诊断：{JSON.stringify(getSyncDiagnostics())}</small>
-        {syncMsg && <div className="notice" style={{ marginTop: 8 }}>{syncMsg}</div>}
       </section>
 
       <section className="card card-hover">

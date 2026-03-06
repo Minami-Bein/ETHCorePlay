@@ -37,6 +37,9 @@ export function SVGRenderer() {
     return new Set([...(pending.length ? pending : paths[pathMode]), lastVisitedChapter || '']);
   }, [curriculumDone, lastVisitedChapter, pathMode]);
 
+  const currentNode = nodes.find((n) => n.id === lastVisitedChapter) || null;
+  const nextNode = nodes.find((n) => highlightedIds.has(n.id) && n.id !== currentNode?.id) || null;
+
   const locateNode = () => {
     const k = query.trim().toLowerCase();
     if (!k) return;
@@ -123,7 +126,12 @@ export function SVGRenderer() {
         </g>
       </svg>
 
-      {hover && <p className="subtle">{hover.name} · {hover.zone} · <Link to={`/plot/${hover.id}`}>打开地块</Link></p>}
+      <div className="notice" style={{ marginTop: 8 }}>
+        <div><strong>You are here：</strong>{currentNode ? `${currentNode.name}（${currentNode.zone}）` : '尚未定位，建议先完成第一章'}</div>
+        <div><strong>Next recommended：</strong>{nextNode ? `${nextNode.name}` : '已完成当前路径节点'} · <span className="subtle">Why this: 与当前路径依赖最短</span></div>
+        <div><strong>完成后解锁：</strong>{pathMode === 'newbie' ? '开发者路径章节' : pathMode === 'builder' ? '核心贡献路径章节' : '高级实战节点'}</div>
+      </div>
+      {hover && <p className="subtle">{hover.name} · {hover.zone} · <Link to={`/plot/${hover.id}`}>开始学习</Link></p>}
     </div>
   );
 }

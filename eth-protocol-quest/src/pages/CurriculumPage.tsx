@@ -42,6 +42,7 @@ export function CurriculumPage() {
   const [visibleCount, setVisibleCount] = useState(8);
   const [cmsChapters, setCmsChapters] = useState([...foundationChapters, ...deepDiveChapters]);
   const [cmsAssessments, setCmsAssessments] = useState(localAssessments);
+  const [chapterFeedback, setChapterFeedback] = useState<Record<string, string>>({});
   const {
     wrongBook,
     chapterResults,
@@ -223,6 +224,16 @@ export function CurriculumPage() {
       const c = target[i % target.length];
       return `${d}：学习《${c.title}》30-45分钟 + 章节测评1次 + 错题回放10分钟`;
     });
+  };
+
+  const saveChapterFeedback = (chapterId: string, text: string) => {
+    setChapterFeedback((m) => ({ ...m, [chapterId]: text }));
+    try {
+      const key = 'epq_chapter_feedback_v1';
+      const old = JSON.parse(localStorage.getItem(key) || '{}');
+      old[chapterId] = { text, ts: Date.now() };
+      localStorage.setItem(key, JSON.stringify(old));
+    } catch {}
   };
 
   const setAnswer = (chapterId: string, qid: string, v: number) => {
@@ -662,6 +673,16 @@ export function CurriculumPage() {
 
             {expandedChapters[chapter.id] && (
               <>
+            <div className="taskflow" style={{ marginTop: 8 }}>
+              <strong>任务流（学什么→做什么→怎么测→完成奖励）</strong>
+              <div className="chips" style={{ marginTop: 6 }}>
+                <span className="chip">1) 学什么：掌握 {chapter.objective}</span>
+                <span className="chip">2) 做什么：完成 1 个实战任务</span>
+                <span className="chip">3) 怎么测：提交章节测评</span>
+                <span className="chip">4) 完成奖励：解锁章节完成徽记</span>
+              </div>
+            </div>
+
             <div style={{ marginTop: 8 }}>
               <strong>前置依赖</strong>
               <div>{(chapterDependencies[chapter.id] || []).length ? (chapterDependencies[chapter.id] || []).map((d) => { const dep = allChapters.find((c) => c.id === d); return `${dep?.title || d}${done[d] ? ' ✅' : ' ⏳'}`; }).join(' / ') : '无（可直接学习）'}</div>
@@ -786,6 +807,12 @@ export function CurriculumPage() {
                   </ol>
                 </div>
               ))}
+            </div>
+
+            <div style={{ marginTop: 10 }}>
+              <strong>反馈闭环</strong>
+              <label htmlFor={`fb-${chapter.id}`} className="subtle" style={{ display: 'block' }}>这一章最卡你的点是什么？</label>
+              <textarea id={`fb-${chapter.id}`} value={chapterFeedback[chapter.id] || ''} onChange={(e) => saveChapterFeedback(chapter.id, e.target.value)} placeholder="例如：finality 与 fork-choice 的关系" style={{ width: '100%', minHeight: 68, borderRadius: 10, border: '1px solid var(--border-default)', padding: 8 }} />
             </div>
               </>
             )}

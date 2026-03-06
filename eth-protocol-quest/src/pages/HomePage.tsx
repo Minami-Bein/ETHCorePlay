@@ -131,6 +131,7 @@ export function HomePage() {
   }, [wrongBook.length, allChapters, curriculumDone]);
 
   const [badgeToast, setBadgeToast] = useState<string | null>(null);
+  const [showSecondary, setShowSecondary] = useState(false);
 
   useEffect(() => {
     const allDone = Object.values(onboardingTasks || {}).every(Boolean);
@@ -148,36 +149,31 @@ export function HomePage() {
     <main className="container">
       <section className="hero dashboard-grid">
         <div className="card banner-glow card-hover">
-          <h1 className="hero-title">ETHCorePlay · Protocol Learning, Playfully Engineered</h1>
-          <p className="brand-tagline">Build real Ethereum protocol skills with measurable progress and contributor-ready practice.</p>
-          <span className="glass-ribbon">🌿 ETHCorePlay · Protocol Engineer Track</span>
-          <p>从 EL/CL/EVM 到 Engine API 与客户端测试，用章节、测评、错题回放和实战模板构建真实能力。</p>
-          <div className="chips" style={{ margin: '10px 0 14px' }}>
-            <span className="chip">Learning-first</span>
-            <span className="chip">Assessment-driven</span>
-            <span className="chip">Client Contribution Ready</span>
-          </div>
+          <h1 className="hero-title">今天只做一件事</h1>
+          <p className="brand-tagline">下一步学习动作：<strong>{nextBestAction.label}</strong></p>
+          <p className="subtle">预计耗时：{recommendationV3.eta} 分钟</p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <Link to="/curriculum" className="btn">进入系统课程</Link>
-            <Link to="/map" className="btn">开始闯关</Link>
-            <Link to="/progress" className="btn">学习总览</Link>
-            <a className="btn" href="https://github.com/XiaoHai67890/ETHCorePlay/issues/new" target="_blank" rel="noreferrer">提交反馈</a>
+            <Link to={nextBestAction.to} className="btn" onClick={() => metricRecClick()}>开始学习</Link>
+            <button className="btn btn-ghost" onClick={() => setShowSecondary((v) => !v)}>{showSecondary ? '收起次屏信息' : '展开次屏信息'}</button>
           </div>
-        </div>
-
-        <div className="card">
-          <h3>学习仪表盘</h3>
-          <div className="kpi-grid">
-            <div className="kpi"><small>当前 XP</small><br/><b>{xp}</b></div>
-            <div className="kpi"><small>已解锁关卡</small><br/><b>Lv{unlockedLevel}</b></div>
-            <div className="kpi"><small>已通过测评</small><br/><b>{passCount}</b></div>
-          </div>
-          <p style={{ marginTop: 10 }}>错题池：<strong>{wrongBook.length}</strong> 条（建议先去总览页复盘）</p>
-          <div className="notice">本周建议：优先完成 2 个章节测评 + 1 次错题回放，再进入深度实操章节。
-            <br/>当前徽章：{badges.length ? badges.join(' · ') : '暂无'}
+          <div className="sticky-action-bar">
+            <Link to={nextBestAction.to} className="btn" onClick={() => metricRecClick()}>开始学习</Link>
+            <Link to={lastVisitedSection ? `/curriculum#${lastVisitedSection}` : '/curriculum#el-core'} className="btn btn-ghost">继续学习</Link>
           </div>
         </div>
       </section>
+
+      {showSecondary && (
+        <section className="card card-hover">
+          <h3>次屏：统计 / 图谱 / 推荐解释</h3>
+          <div className="kpi-grid">
+            <div className="kpi"><small>当前 XP</small><br/><b>{xp}</b></div>
+            <div className="kpi"><small>已通过测评</small><br/><b>{passCount}</b></div>
+            <div className="kpi"><small>错题池</small><br/><b>{wrongBook.length}</b></div>
+          </div>
+          <p className="subtle" style={{ marginTop: 8 }}>推荐解释：{recommendationV3.reason}</p>
+        </section>
+      )}
 
       {badgeToast && <div className="toast">{badgeToast}</div>}
 
@@ -186,8 +182,8 @@ export function HomePage() {
         <p><strong>建议动作：</strong>{nextBestAction.label}</p>
         <p>{nextBestAction.reason}</p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <Link to={nextBestAction.to} className="btn" onClick={() => metricRecClick()}>执行下一最佳动作</Link>
-          <Link to={lastVisitedSection ? `/curriculum#${lastVisitedSection}` : (lastVisitedChapter ? `/curriculum#${lastVisitedChapter}` : '/curriculum#el-core')} className="btn btn-ghost">回到上次学习位置</Link>
+          <Link to={nextBestAction.to} className="btn" onClick={() => metricRecClick()}>开始学习</Link>
+          <Link to={lastVisitedSection ? `/curriculum#${lastVisitedSection}` : (lastVisitedChapter ? `/curriculum#${lastVisitedChapter}` : '/curriculum#el-core')} className="btn btn-ghost">继续学习</Link>
         </div>
       </div>
 
@@ -297,9 +293,9 @@ export function HomePage() {
           <div className="level"><strong>扩容热点</strong><small>EIP-4844 blob 成本窗口与批次调优</small></div>
         </div>
         <div className="quick-links" style={{ marginTop: 10 }}>
-          <Link to="/curriculum#eip4844-da-economics-deep" className="btn">去学 4844</Link>
-          <Link to="/curriculum#pbs-inclusion-censorship-deep" className="btn">去学 PBS</Link>
-          <Link to="/curriculum#verkle-stateless-deep" className="btn">去学 Verkle</Link>
+          <Link to="/curriculum#eip4844-da-economics-deep" className="btn">开始学习</Link>
+          <Link to="/curriculum#pbs-inclusion-censorship-deep" className="btn">去复测</Link>
+          <Link to="/curriculum#verkle-stateless-deep" className="btn">去实战</Link>
         </div>
       </div>
 
