@@ -44,6 +44,14 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
 
   const panel = active || located;
 
+  const activePaths = useMemo(() => {
+    if (!panel) return [] as Array<{x1:number;y1:number;x2:number;y2:number}>;
+    const src = pos.find((p) => p.term === panel.term);
+    if (!src) return [];
+    const rel = new Set(panel.relatedTerms || []);
+    return pos.filter((p) => rel.has(p.term)).map((p) => ({ x1: src.x, y1: src.y, x2: p.x, y2: p.y }));
+  }, [panel, pos]);
+
   return (
     <section className="card card-hover glossary-graph-card">
       <div className="card-title-row">
@@ -89,6 +97,10 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
                 />
               ))}
 
+              {activePaths.map((l, i) => (
+                <line key={`ap-${i}`} x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} className="related-path-line" />
+              ))}
+
               {pos.map((p) => {
                 const isActive = panel?.term === p.term;
                 const isHit = !!query && `${p.term} ${p.desc}`.toLowerCase().includes(query.toLowerCase());
@@ -121,7 +133,7 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
 
               {!!panel.relatedTerms?.length && (
                 <div style={{ marginTop: 10 }}>
-                  <small className="subtle">相关术语</small>
+                  <small className="subtle">相关术语（Related Paths 已高亮）</small>
                   <div className="chips" style={{ marginTop: 6 }}>
                     {panel.relatedTerms.map((t) => <span className="chip" key={t}>{t}</span>)}
                   </div>

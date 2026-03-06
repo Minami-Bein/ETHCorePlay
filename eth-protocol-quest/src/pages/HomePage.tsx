@@ -158,7 +158,7 @@ export function HomePage() {
   return (
     <main className="container">
       <section className="hero dashboard-grid section-block">
-        <div className="card banner-glow card-hover garden-entrance">
+        <div className="card banner-glow card-hover garden-entrance fog-terrain">
           <h1 className="hero-title">进入协议花园，今天先生长一小步</h1>
           <p className="brand-tagline">下一步学习动作：<span className="hero-action-pill">{nextBestAction.label}</span></p>
           <p className="subtle">{t('etaMins', lang)}：<strong>{recommendationV3.eta} 分钟</strong></p>

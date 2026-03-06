@@ -69,6 +69,7 @@ export function CurriculumPage() {
     awardBadge,
     setLastVisitedChapter,
     setLastVisitedSection,
+    lastVisitedChapter,
     curriculumDone: done,
     curriculumChecklist: checklistState,
     curriculumExpanded: expandedChapters,
@@ -146,6 +147,20 @@ export function CurriculumPage() {
   const telemetry = useMemo(() => telemetrySnapshot(), [chapterResults, done, wrongBook.length]);
 
   const completedCount = Object.values(done).filter(Boolean).length;
+
+  const trailCurrent = useMemo(() => {
+    return allChapters.find((c) => c.id === lastVisitedChapter) || allChapters.find((c) => !done[c.id]) || allChapters[0];
+  }, [allChapters, lastVisitedChapter, done]);
+
+  const trailUpstream = useMemo(() => {
+    if (!trailCurrent) return [] as any[];
+    return (chapterDependencies[trailCurrent.id] || []).map((id) => allChapters.find((c) => c.id === id)).filter(Boolean);
+  }, [trailCurrent, allChapters]);
+
+  const trailDownstream = useMemo(() => {
+    if (!trailCurrent) return [] as any[];
+    return allChapters.filter((c) => (chapterDependencies[c.id] || []).includes(trailCurrent.id)).slice(0, 4);
+  }, [trailCurrent, allChapters]);
   const progressPct = Math.round((completedCount / allChapters.length) * 100);
 
   const toggleDone = (id: string) => { const next = !done[id]; setCurriculumDone(id, next); if (next) metricChapterComplete(id); };
@@ -398,6 +413,16 @@ export function CurriculumPage() {
       <h2>{lang==='zh'?'系统化学习课程（基础→进阶）':'Curriculum (Foundation → Advanced)'}</h2>
       <p className="subtle">Garden &gt; Trails &gt; Chapters · 你可以从不同路径进入同一知识点。</p>
       <p>{lang==='zh'?'学习优先：先完整掌握章节，再用闯关做检验。':'Learning first: master chapters, then validate with assessments.'}</p>
+
+      <div className="curriculum-layout">
+        <aside className="card trail-sidebar">
+          <h3 style={{ marginTop: 0 }}>Trail 导航</h3>
+          {trailCurrent && <p><strong>当前节点：</strong><a href={`#${trailCurrent.id}`}>{trailCurrent.title}</a></p>}
+          <div><strong>上游前置</strong><ul>{trailUpstream.length ? trailUpstream.map((c:any)=><li key={c.id}><a href={`#${c.id}`}>{c.title}</a></li>) : <li>无</li>}</ul></div>
+          <div><strong>下游延伸</strong><ul>{trailDownstream.length ? trailDownstream.map((c:any)=><li key={c.id}><a href={`#${c.id}`}>{c.title}</a></li>) : <li>暂无</li>}</ul></div>
+        </aside>
+
+        <div className="curriculum-main">
       {milestoneToast && <div className="toast milestone-burst">{milestoneToast}</div>}
 
       <section className="card">
@@ -850,6 +875,8 @@ export function CurriculumPage() {
           <button className="btn" onClick={() => setVisibleCount((v) => Math.min(v + 8, chapters.length))}>加载更多章节</button>
         </section>
       )}
+        </div>
+      </div>
     </main>
   );
 }
