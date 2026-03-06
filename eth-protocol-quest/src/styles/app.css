@@ -1287,3 +1287,36 @@ body {
   .curriculum-layout { grid-template-columns: 1fr; }
   .trail-sidebar { position: static; }
 }
+
+
+.home-dense-toggle { margin-top: 10px; }
+
+.trail-mini-map {
+  margin-top: 6px;
+  display: grid;
+  gap: 6px;
+  max-height: 220px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.trail-mini-node {
+  display: block;
+  text-decoration: none;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 5px 8px;
+  font-size: 12px;
+  background: color-mix(in srgb, var(--bg-surface) 92%, var(--bg-elevated));
+}
+
+.trail-mini-node.done { border-color: color-mix(in srgb, var(--brand-garden) 35%, var(--border-default)); }
+.trail-mini-node.active {
+  color: var(--text-primary);
+  border-color: color-mix(in srgb, var(--brand-primary) 40%, var(--border-default));
+  background: color-mix(in srgb, var(--brand-primary) 14%, var(--bg-surface));
+}
+
+.graph-canvas-wrap { cursor: grab; }
+.graph-canvas-wrap:active { cursor: grabbing; }

@@ -6,6 +6,10 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
   const [active, setActive] = useState<GlossaryItem | null>(null);
   const [zoom, setZoom] = useState(1);
   const [query, setQuery] = useState('');
+  const [focusMode, setFocusMode] = useState(false);
+  const [pinnedTerm, setPinnedTerm] = useState<string | null>(null);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
 
   const items = useMemo(() => glossary.slice(0, 30), [glossary]);
 
@@ -42,7 +46,8 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
     return pos.find((p) => `${p.term} ${p.desc}`.toLowerCase().includes(k)) || null;
   }, [query, pos]);
 
-  const panel = active || located;
+  const pinned = pinnedTerm ? pos.find((p) => p.term === pinnedTerm) || null : null;
+  const panel = pinned || active || located;
 
   const activePaths = useMemo(() => {
     if (!panel) return [] as Array<{x1:number;y1:number;x2:number;y2:number}>;
@@ -66,6 +71,8 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
           placeholder="搜索术语（自动高亮）"
           style={{ flex: 1, minWidth: 220, padding: 10, borderRadius: 12, border: '1px solid var(--border-default)' }}
         />
+        <button className={`chip-btn ${focusMode?'on':''}`} onClick={() => setFocusMode((v) => !v)}>{focusMode ? '聚焦模式：开' : '聚焦模式：关'}</button>
+        <button className="btn btn-ghost" onClick={() => setPinnedTerm(null)}>取消固定节点</button>
         <div className="zoom-wrap">
           <small className="subtle">缩放</small>
           <input type="range" min={0.8} max={2.1} step={0.01} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} style={{ width: 150 }} />
@@ -73,7 +80,7 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
       </div>
 
       <div className="graph-layout">
-        <div className="graph-canvas-wrap">
+        <div className="graph-canvas-wrap" onMouseDown={() => setDragging(true)} onMouseUp={() => setDragging(false)} onMouseLeave={() => setDragging(false)} onMouseMove={(e) => { if (!dragging) return; setPan((p) => ({ x: p.x + e.movementX * 0.35, y: p.y + e.movementY * 0.35 })); }}>
           <svg viewBox="0 0 820 460" className="glossary-graph-svg">
             <defs>
               <radialGradient id="graphBg" cx="50%" cy="45%" r="60%">
@@ -83,8 +90,9 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
               </radialGradient>
             </defs>
             <rect x="0" y="0" width="820" height="460" fill="url(#graphBg)" />
-            <g transform={`translate(${410 - 410 * zoom} ${230 - 230 * zoom}) scale(${zoom})`}>
-              {edges.map((e, i) => (
+            <g transform={`translate(${410 - 410 * zoom + pan.x} ${230 - 230 * zoom + pan.y}) scale(${zoom})`}>
+
+              {(focusMode && panel ? edges.filter((e)=> pos[e.a].term===panel.term || pos[e.b].term===panel.term) : edges).map((e, i) => (
                 <line
                   key={i}
                   x1={pos[e.a].x}
@@ -105,7 +113,7 @@ export function GlossaryGraph({ glossary }: { glossary: GlossaryItem[] }) {
                 const isActive = panel?.term === p.term;
                 const isHit = !!query && `${p.term} ${p.desc}`.toLowerCase().includes(query.toLowerCase());
                 return (
-                  <g key={p.term} onMouseEnter={() => setActive(p)} onMouseLeave={() => setActive(null)}>
+                  <g key={p.term} onMouseEnter={() => setActive(p)} onMouseLeave={() => setActive(null)} onClick={() => setPinnedTerm((old) => old===p.term?null:p.term)}>
                     <circle
                       cx={p.x}
                       cy={p.y}

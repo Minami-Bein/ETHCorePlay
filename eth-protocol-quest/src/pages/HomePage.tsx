@@ -137,6 +137,7 @@ export function HomePage() {
   const [badgeToast, setBadgeToast] = useState<string | null>(null);
   const [showSecondary, setShowSecondary] = useState(false);
   const [showHeavyPanels, setShowHeavyPanels] = useState(false);
+  const [showAdvancedPanels, setShowAdvancedPanels] = useState(false);
 
   useEffect(() => {
     const id = setTimeout(() => setShowHeavyPanels(true), 380);
@@ -219,6 +220,22 @@ export function HomePage() {
         </div>
       </section>
 
+
+      <section className="card card-hover section-block">
+        <div className="card-title-row">
+          <h3 style={{ margin: 0 }}>内容层级视图</h3>
+          <span className="meta-pill">降噪模式</span>
+        </div>
+        <p className="subtle" style={{ marginTop: 6 }}>默认仅展示核心内容；进阶分析和扩展卡片按需展开。</p>
+        <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+          <button className="btn btn-ghost" onClick={() => setShowAdvancedPanels((v) => !v)}>{showAdvancedPanels ? '收起进阶区' : '展开进阶区'}</button>
+          <Link className="btn btn-ghost" to="/curriculum">进入课程主线</Link>
+          <Link className="btn btn-ghost" to="/progress">查看成长看板</Link>
+        </div>
+      </section>
+
+
+
       <div className="stagger">
       <div className="card card-hover">
         <h3 className="section-title">今日智能建议</h3>
@@ -270,6 +287,8 @@ export function HomePage() {
         </div>
       </div>
 
+      {showAdvancedPanels && (
+      <>
       <div className="card">
         <h3>学习路线速览</h3>
         <ul>
@@ -340,6 +359,9 @@ export function HomePage() {
           <Link to="/curriculum#verkle-stateless-deep" className="btn">去实战</Link>
         </div>
       </div>
+
+      </>
+      )}
 
       </div>
 

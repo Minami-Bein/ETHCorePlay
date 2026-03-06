@@ -161,6 +161,15 @@ export function CurriculumPage() {
     if (!trailCurrent) return [] as any[];
     return allChapters.filter((c) => (chapterDependencies[c.id] || []).includes(trailCurrent.id)).slice(0, 4);
   }, [trailCurrent, allChapters]);
+
+  const trailNodes = useMemo(() => allChapters.slice(0, 14), [allChapters]);
+
+  useEffect(() => {
+    if (!trailCurrent?.id) return;
+    const el = document.getElementById(`trail-node-${trailCurrent.id}`);
+    el?.scrollIntoView({ block: 'nearest' });
+  }, [trailCurrent?.id]);
+
   const progressPct = Math.round((completedCount / allChapters.length) * 100);
 
   const toggleDone = (id: string) => { const next = !done[id]; setCurriculumDone(id, next); if (next) metricChapterComplete(id); };
@@ -418,8 +427,17 @@ export function CurriculumPage() {
         <aside className="card trail-sidebar">
           <h3 style={{ marginTop: 0 }}>Trail 导航</h3>
           {trailCurrent && <p><strong>当前节点：</strong><a href={`#${trailCurrent.id}`}>{trailCurrent.title}</a></p>}
+          <div style={{ marginBottom: 8 }}>
+            <small>路径进度：{progressPct}%</small>
+            <div className="progress-rail" style={{ marginTop: 4 }}><div className="progress-fill" style={{ width: `${progressPct}%` }} /></div>
+          </div>
           <div><strong>上游前置</strong><ul>{trailUpstream.length ? trailUpstream.map((c:any)=><li key={c.id}><a href={`#${c.id}`}>{c.title}</a></li>) : <li>无</li>}</ul></div>
           <div><strong>下游延伸</strong><ul>{trailDownstream.length ? trailDownstream.map((c:any)=><li key={c.id}><a href={`#${c.id}`}>{c.title}</a></li>) : <li>暂无</li>}</ul></div>
+          <div style={{ marginTop: 8 }}><strong>路径小地图</strong>
+            <div className="trail-mini-map">
+              {trailNodes.map((c:any) => <a id={`trail-node-${c.id}`} key={c.id} href={`#${c.id}`} className={`trail-mini-node ${trailCurrent?.id===c.id?'active':''} ${done[c.id]?'done':''}`}>{c.title}</a>)}
+            </div>
+          </div>
         </aside>
 
         <div className="curriculum-main">
