@@ -443,7 +443,7 @@ export function CurriculumPage() {
         <div className="curriculum-main">
       {milestoneToast && <div className="toast milestone-burst">{milestoneToast}</div>}
 
-      <section className="card">
+      <section className="card garden-shell">
         <h3>课程质量体系看板</h3>
         <div className="grid">
           {chapterQualityBoard.slice(0, 10).map((r) => (
@@ -729,6 +729,7 @@ export function CurriculumPage() {
 
             {expandedChapters[chapter.id] && (
               <>
+            <div className="article-reading-shell">
             <div className="taskflow" style={{ marginTop: 8 }}>
               <strong>任务流（学什么→做什么→怎么测→完成奖励）</strong>
               <div className="chips" style={{ marginTop: 6 }}>
@@ -876,10 +877,11 @@ export function CurriculumPage() {
               ))}
             </div>
 
-            <div style={{ marginTop: 10 }}>
+            <div className="callout insight" style={{ marginTop: 10 }}>
               <strong>反馈闭环</strong>
               <label htmlFor={`fb-${chapter.id}`} className="subtle" style={{ display: 'block' }}>这一章最卡你的点是什么？</label>
               <textarea id={`fb-${chapter.id}`} value={chapterFeedback[chapter.id] || ''} onChange={(e) => saveChapterFeedback(chapter.id, e.target.value)} placeholder="例如：finality 与 fork-choice 的关系" style={{ width: '100%', minHeight: 68, borderRadius: 10, border: '1px solid var(--border-default)', padding: 8 }} />
+            </div>
             </div>
               </>
             )}

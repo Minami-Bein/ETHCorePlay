@@ -159,7 +159,7 @@ export function HomePage() {
   return (
     <main className="container">
       <section className="hero dashboard-grid section-block">
-        <div className="card banner-glow card-hover garden-entrance fog-terrain">
+        <div className="card banner-glow card-hover garden-entrance fog-terrain garden-shell">
           <h1 className="hero-title">进入协议花园，今天先生长一小步</h1>
           <p className="brand-tagline">下一步学习动作：<span className="hero-action-pill">{nextBestAction.label}</span></p>
           <p className="subtle">{t('etaMins', lang)}：<strong>{recommendationV3.eta} 分钟</strong></p>
@@ -207,7 +207,7 @@ export function HomePage() {
 
 
 
-      <section className="card card-hover section-block">
+      <section className="card card-hover section-block garden-section garden-shell">
         <div className="card-title-row">
           <h3 className="section-title" style={{ margin: 0 }}>Learning Trails · 学习路径</h3>
           <small className="subtle">弱中心化探索：可从任一路径进入</small>
@@ -235,6 +235,20 @@ export function HomePage() {
       </section>
 
 
+
+      <section className="card card-hover garden-section garden-shell">
+        <div className="card-title-row">
+          <h3 className="section-title" style={{ margin: 0 }}>协议演化时间轴</h3>
+          <span className="meta-pill">Protocol Evolution</span>
+        </div>
+        <div className="protocol-timeline" style={{ marginTop: 8 }}>
+          <article className="protocol-milestone"><strong>Frontier</strong><small className="subtle">初始执行语义与账户模型。</small></article>
+          <article className="protocol-milestone"><strong>Byzantium / Istanbul</strong><small className="subtle">Gas、opcode 与安全边界持续调整。</small></article>
+          <article className="protocol-milestone"><strong>The Merge</strong><small className="subtle">PoS 共识接管，执行/共识分层清晰。</small></article>
+          <article className="protocol-milestone"><strong>Rollup-centric</strong><small className="subtle">4844 与 DA 经济推动 L2 生态。</small></article>
+          <article className="protocol-milestone"><strong>Future Upgrades</strong><small className="subtle">Verkle、Stateless、PBS 等研究演进。</small></article>
+        </div>
+      </section>
 
       <div className="stagger">
       <div className="card card-hover">
