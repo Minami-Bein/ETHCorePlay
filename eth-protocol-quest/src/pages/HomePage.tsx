@@ -181,15 +181,15 @@ export function HomePage() {
           <div className="profile-intro-row">
             <div className="profile-avatar-placeholder" aria-label="头像占位">Avatar</div>
             <div>
-              <div><strong>你的名字 / Name</strong></div>
-              <small className="subtle">一句介绍：例如「专注 Ethereum 协议学习与工程实践」</small>
+              <div><strong>XiaoHai67890</strong></div>
+              <small className="subtle">以太坊协议研究成员</small>
             </div>
           </div>
 
           <div className="profile-links">
-            <div className="profile-link-item"><strong>微信：</strong><span className="subtle">（填你的微信号或二维码说明）</span></div>
-            <div className="profile-link-item"><strong>Telegram：</strong><span className="subtle">https://t.me/your_handle</span></div>
-            <div className="profile-link-item"><strong>X：</strong><span className="subtle">https://x.com/your_handle</span></div>
+            <div className="profile-link-item"><strong>微信：</strong><span className="subtle">XiaoHai4890</span></div>
+            <div className="profile-link-item"><strong>Telegram：</strong><span className="subtle">@XiaoHai489</span></div>
+            <div className="profile-link-item"><strong>X：</strong><span className="subtle">https://x.com/XiaoHai67890</span></div>
           </div>
         </aside>
 
