@@ -1,3 +1,14 @@
+---
+id: ethcoreplay-ui-polish-pass
+title: ethcoreplay-ui-polish-pass.md
+type: feature
+status: in-progress
+priority: medium
+tags: []
+created_at: '2026-03-11T22:28:08.876Z'
+updated_at: '2026-03-11T22:28:08.877Z'
+---
+
 # UI 优化任务（ETHCorePlay）
 
 ## 目标
