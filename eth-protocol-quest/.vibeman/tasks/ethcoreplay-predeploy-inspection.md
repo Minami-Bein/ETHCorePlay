@@ -2,11 +2,11 @@
 id: ethcoreplay-predeploy-inspection
 title: ethcoreplay-predeploy-inspection.md
 type: feature
-status: in-progress
+status: backlog
 priority: medium
 tags: []
 created_at: '2026-03-11T22:28:05.211Z'
-updated_at: '2026-03-11T22:28:05.211Z'
+updated_at: '2026-03-11T22:34:20.345Z'
 ---
 
 # 发布前巡检任务（ETHCorePlay）
