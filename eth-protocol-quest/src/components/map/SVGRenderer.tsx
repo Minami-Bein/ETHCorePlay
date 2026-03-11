@@ -8,17 +8,25 @@ type EdgeType = 'depends' | 'related' | 'research';
 
 const nodes: Node[] = [
   { id: 'el-core', name: 'Execution', zone: 'Execution', x: 80, y: 140 },
-  { id: 'cl-core', name: 'Consensus', zone: 'Consensus', x: 220, y: 80 },
-  { id: 'engine-api-core', name: 'Engine API', zone: 'Tooling', x: 380, y: 150 },
-  { id: 'l2-da-core', name: 'Scaling', zone: 'Scaling', x: 520, y: 90 },
-  { id: 'security-core', name: 'Security', zone: 'Security', x: 660, y: 160 }
+  { id: 'cl-core', name: 'Consensus', zone: 'Consensus', x: 210, y: 80 },
+  { id: 'evm-core', name: 'EVM', zone: 'Execution', x: 180, y: 180 },
+  { id: 'engine-api-core', name: 'Engine API', zone: 'Tooling', x: 350, y: 150 },
+  { id: 'tx-lifecycle-core', name: 'Networking', zone: 'P2P', x: 340, y: 70 },
+  { id: 'l2-da-core', name: 'Scaling', zone: 'Scaling', x: 510, y: 95 },
+  { id: 'security-core', name: 'Security', zone: 'Security', x: 650, y: 155 },
+  { id: 'verkle-stateless-deep', name: 'Verkle', zone: 'Research', x: 620, y: 70 }
 ];
 
 const edgeDefs: Array<{ a: number; b: number; type: EdgeType }> = [
   { a: 0, b: 1, type: 'depends' },
-  { a: 1, b: 2, type: 'related' },
-  { a: 2, b: 3, type: 'depends' },
-  { a: 2, b: 4, type: 'research' }
+  { a: 0, b: 2, type: 'depends' },
+  { a: 1, b: 3, type: 'related' },
+  { a: 2, b: 3, type: 'related' },
+  { a: 3, b: 4, type: 'depends' },
+  { a: 3, b: 5, type: 'depends' },
+  { a: 5, b: 6, type: 'related' },
+  { a: 5, b: 7, type: 'research' },
+  { a: 1, b: 7, type: 'research' }
 ];
 
 export function SVGRenderer() {
@@ -107,7 +115,7 @@ export function SVGRenderer() {
 
       <svg
         ref={svgRef}
-        viewBox="0 0 760 230"
+        viewBox="0 0 760 250"
         style={{ width: '100%', height: 'auto', borderRadius: 12, background: 'var(--bg-elevated)', cursor: dragging.current.on ? 'grabbing' : 'grab' }}
         onWheel={onWheel}
         onMouseDown={(e) => { dragging.current = { on: true, x: e.clientX, y: e.clientY, px: pan.x, py: pan.y }; }}
@@ -154,6 +162,19 @@ export function SVGRenderer() {
         <div><strong>Next recommended：</strong>{nextNode ? `${nextNode.name}` : '已完成当前路径节点'} · <span className="subtle">Why this: 与当前路径依赖最短</span></div>
         <div><strong>完成后解锁：</strong>{pathMode === 'newbie' ? '开发者路径章节' : pathMode === 'builder' ? '核心贡献路径章节' : '高级实战节点'}</div>
       </div>
+      <section className="card" style={{ marginTop: 10 }}>
+        <div className="card-title-row"><strong>地图学习快照</strong><span className="meta-pill">Map Insights</span></div>
+        <div className="chips" style={{ marginTop: 8 }}>
+          <span className="chip">节点：{nodes.length}</span>
+          <span className="chip">关系：{edges.length}</span>
+          <span className="chip">当前路径：{pathMode}</span>
+        </div>
+        <div className="quick-links" style={{ marginTop: 8 }}>
+          <Link className="btn btn-ghost" to="/curriculum#el-core">执行层入口</Link>
+          <Link className="btn btn-ghost" to="/curriculum#cl-core">共识层入口</Link>
+          <Link className="btn btn-ghost" to="/curriculum#verkle-stateless-deep">研究入口</Link>
+        </div>
+      </section>
       {hover && <p className="subtle">{hover.name} · {hover.zone} · <Link to={`/plot/${hover.id}`}>开始学习</Link></p>}
     </div>
   );

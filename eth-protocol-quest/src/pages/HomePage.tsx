@@ -148,6 +148,15 @@ export function HomePage() {
     { id: 'future', title: 'Future Upgrades', desc: 'Verkle / PBS / Stateless', to: '/curriculum#verkle-stateless-deep' }
   ];
 
+  const timelineMilestones = [
+    { id:'frontier', year:'2015', title:'Frontier', summary:'主网启动，账户模型与 EVM 执行语义确立。', detail:'内容聚焦：账户/nonce/gas 基础，初代执行语义。', link:'/curriculum#el-core' },
+    { id:'istanbul', year:'2017-2019', title:'Byzantium / Istanbul', summary:'预编译、Gas 计价与 opcode 安全边界持续演化。', detail:'内容聚焦：opcode repricing、预编译、硬分叉治理。', link:'/curriculum#eip-workflow-core' },
+    { id:'merge', year:'2022', title:'The Merge', summary:'PoS 接管，共识层与执行层正式分工协作。', detail:'内容聚焦：EL-CL 分层、验证者经济与 finality。', link:'/curriculum#cl-core' },
+    { id:'rollup', year:'2024+', title:'Rollup-centric', summary:'EIP-4844 带来 blob DA 经济窗口，L2 成本结构重塑。', detail:'内容聚焦：blob DA、batch economics、L2 吞吐。', link:'/curriculum#eip4844-da-economics-deep' },
+    { id:'future', year:'Next', title:'Future Upgrades', summary:'Verkle / Stateless / PBS 持续推进，长期扩展性为核心目标。', detail:'内容聚焦：state witness、PBS 分工、抗审查路径。', link:'/curriculum#verkle-stateless-deep' }
+  ];
+  const [activeMilestone, setActiveMilestone] = useState(timelineMilestones[2]);
+
   const crossPollination = [
     { from: 'Gas', to: 'State Access Patterns', why: 'Gas 热点常由状态访问路径决定', href: '/curriculum#evm-core' },
     { from: 'Finality', to: 'Fork Choice', why: '最终性理解依赖 fork-choice 信号', href: '/curriculum#cl-core' },
@@ -260,11 +269,18 @@ export function HomePage() {
           <span className="meta-pill">Protocol Evolution</span>
         </div>
         <div className="protocol-timeline" style={{ marginTop: 10 }}>
-          <article className="protocol-milestone"><span className="timeline-year">2015</span><strong>Frontier</strong><small className="subtle">主网启动，账户模型与 EVM 执行语义确立。</small><small className="subtle">关键词：账户 / nonce / gas</small></article>
-          <article className="protocol-milestone"><span className="timeline-year">2017-2019</span><strong>Byzantium / Istanbul</strong><small className="subtle">预编译、Gas 计价与 opcode 安全边界持续演化。</small><small className="subtle">关键词：precompile / repricing / hardfork</small></article>
-          <article className="protocol-milestone key"><span className="timeline-year">2022</span><strong>The Merge</strong><small className="subtle">PoS 接管，共识层与执行层正式分工协作。</small><small className="subtle">影响：验证者经济 / finality / EL-CL Engine API</small></article>
-          <article className="protocol-milestone key"><span className="timeline-year">2024+</span><strong>Rollup-centric</strong><small className="subtle">EIP-4844 带来 blob DA 经济窗口，L2 成本结构重塑。</small><small className="subtle">影响：L2 吞吐 / 数据可用性成本 / batch 策略</small></article>
-          <article className="protocol-milestone future"><span className="timeline-year">Next</span><strong>Future Upgrades</strong><small className="subtle">Verkle / Stateless / PBS 持续推进，长期扩展性为核心目标。</small><small className="subtle">趋势：state witness / proposer-builder 分工 / 抗审查</small></article>
+          {timelineMilestones.map((m) => (
+            <article key={m.id} className={`protocol-milestone ${activeMilestone.id===m.id?'key':''} ${m.id==='future'?'future':''}`} onClick={() => setActiveMilestone(m)} role="button" tabIndex={0}>
+              <span className="timeline-year">{m.year}</span>
+              <strong>{m.title}</strong>
+              <small className="subtle">{m.summary}</small>
+            </article>
+          ))}
+        </div>
+        <div className="callout insight" style={{ marginTop: 10 }}>
+          <strong>{activeMilestone.title} · 深入内容</strong>
+          <p className="subtle" style={{ margin: '6px 0' }}>{activeMilestone.detail}</p>
+          <Link className="btn btn-ghost" to={activeMilestone.link}>查看对应升级内容</Link>
         </div>
       </section>
 
