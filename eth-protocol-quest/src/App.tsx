@@ -1,5 +1,6 @@
 import { Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect, useState } from 'react';
+import { Leaf } from 'lucide-react';
 import { CommandK } from './components/CommandK';
 import { getLang, setLang, type Lang } from './services/i18n';
 
@@ -39,15 +40,15 @@ export function App() {
   return (
     <>
       <div className="mesh-bg" aria-hidden />
-      <a className="skip-link" href="#main-content">
-        跳到主内容
-      </a>
       <header className="topbar" role="banner">
         <div className="topbar-inner">
           <Link to="/" className="brand">
-            🌿 Ethereum Infinite Garden Quest
+            <span className="brand-mark" aria-hidden="true">
+              <Leaf size={24} strokeWidth={2.1} color="#4a8f61" />
+            </span>
+            <span className="brand-text">Ethereum Infinite Garden Quest</span>
           </Link>
-          <nav aria-label="主导航">
+          <nav className="topbar-nav" aria-label="主导航">
             <NavLink to="/map" className={isMapArea ? 'active' : ''}>
               {lang === 'zh' ? '地图' : 'Map'}
             </NavLink>
@@ -63,17 +64,24 @@ export function App() {
             <NavLink to="/search" className={({ isActive }) => (isActive ? 'active' : '')}>
               {lang === 'zh' ? '搜索' : 'Search'}
             </NavLink>
+          </nav>
+          <div className="topbar-actions">
             <button
-              className="lang-switch"
+              className={`lang-switch ${lang === 'en' ? 'is-en' : 'is-zh'}`}
               onClick={() => {
                 const nextLang = lang === 'zh' ? 'en' : 'zh';
                 setLangState(nextLang);
                 setLang(nextLang);
               }}
+              aria-label={lang === 'zh' ? 'Switch to English' : '切换到中文'}
             >
-              {lang === 'zh' ? 'EN' : '中'}
+              <span className="lang-switch-track">
+                <span className="lang-switch-indicator" aria-hidden />
+                <span className="lang-switch-label lang-switch-label-zh">中文</span>
+                <span className="lang-switch-label lang-switch-label-en">EN</span>
+              </span>
             </button>
-          </nav>
+          </div>
         </div>
       </header>
       <CommandK />

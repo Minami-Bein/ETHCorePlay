@@ -1,9 +1,20 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
+import { CustomSelect } from '../components/CustomSelect';
 import { plots, zoneMap, ZoneKey } from '../data/plotCatalog';
 import { levels } from '../data/levels';
 
 const validZoneKeys = new Set<ZoneKey>(['execution', 'consensus', 'tooling', 'security', 'scaling']);
+const zoneDifficultyOptions = [
+  { value: 'all', label: '全部难度', hint: '显示当前园区所有地块' },
+  { value: '1-2', label: '低难度 (1-2)', hint: '先清基础块' },
+  { value: '3-5', label: '中高难度 (3-5)', hint: '直接看进阶块' }
+];
+const zoneSortOptions = [
+  { value: 'recommended', label: '推荐排序', hint: '按默认学习顺序' },
+  { value: 'difficulty', label: '按难度排序', hint: '从轻到重展开' },
+  { value: 'time', label: '按时长排序', hint: '优先短时任务' }
+];
 
 export function ZonePage() {
   const { zoneKey } = useParams();
@@ -73,16 +84,20 @@ export function ZonePage() {
               placeholder="搜索 plot"
               aria-label="搜索 plot"
             />
-            <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
-              <option value="all">全部难度</option>
-              <option value="1-2">低难度 (1-2)</option>
-              <option value="3-5">中高难度 (3-5)</option>
-            </select>
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}>
-              <option value="recommended">推荐排序</option>
-              <option value="difficulty">按难度排序</option>
-              <option value="time">按时长排序</option>
-            </select>
+            <CustomSelect
+              value={difficulty}
+              onChange={(next) => setDifficulty(next as any)}
+              options={zoneDifficultyOptions}
+              ariaLabel="筛选难度"
+              fullWidth
+            />
+            <CustomSelect
+              value={sortBy}
+              onChange={(next) => setSortBy(next as any)}
+              options={zoneSortOptions}
+              ariaLabel="排序方式"
+              fullWidth
+            />
           </div>
           <small className="subtle">结果 {zonePlots.length}</small>
         </aside>

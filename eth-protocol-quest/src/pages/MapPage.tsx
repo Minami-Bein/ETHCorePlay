@@ -2,8 +2,15 @@ import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { useProgressStore } from '../game/store';
 import { GardenMap } from '../components/GardenMap';
+import { CustomSelect } from '../components/CustomSelect';
 import { plots, zones, ZoneKey } from '../data/plotCatalog';
 import { levels } from '../data/levels';
+
+const mapDifficultyOptions = [
+  { value: 'all', label: '全部难度', hint: '不过滤难度层级' },
+  { value: '1-2', label: '低难度 (1-2)', hint: '适合快速切入' },
+  { value: '3-5', label: '中高难度 (3-5)', hint: '偏进阶与深挖' }
+];
 
 export function MapPage() {
   const { unlockedLevel, completed } = useProgressStore();
@@ -64,6 +71,18 @@ export function MapPage() {
     return plots.filter((item) => item.zone === selectedPlot.zone && item.id !== selectedPlot.id).slice(0, 4);
   }, [selectedPlot]);
 
+  const zoneOptions = useMemo(
+    () => [
+      { value: 'all', label: '全部园区', hint: '查看整张花园地图' },
+      ...zones.map((zone) => ({
+        value: zone.key,
+        label: zone.title,
+        hint: zone.subtitle
+      }))
+    ],
+    []
+  );
+
   return (
     <main className="container container-wide">
       <div className="page-head">
@@ -79,19 +98,20 @@ export function MapPage() {
             <h3>筛选器</h3>
             <div className="layout-filters">
               <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="搜索地块" />
-              <select value={zoneFilter} onChange={(e) => setZoneFilter(e.target.value as any)}>
-                <option value="all">全部园区</option>
-                {zones.map((zone) => (
-                  <option key={zone.key} value={zone.key}>
-                    {zone.title}
-                  </option>
-                ))}
-              </select>
-              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
-                <option value="all">全部难度</option>
-                <option value="1-2">低难度 (1-2)</option>
-                <option value="3-5">中高难度 (3-5)</option>
-              </select>
+              <CustomSelect
+                value={zoneFilter}
+                onChange={(next) => setZoneFilter(next as any)}
+                options={zoneOptions}
+                ariaLabel="筛选园区"
+                fullWidth
+              />
+              <CustomSelect
+                value={difficulty}
+                onChange={(next) => setDifficulty(next as any)}
+                options={mapDifficultyOptions}
+                ariaLabel="筛选难度"
+                fullWidth
+              />
             </div>
           </section>
 
