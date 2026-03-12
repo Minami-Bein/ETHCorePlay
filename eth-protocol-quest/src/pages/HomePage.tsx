@@ -149,11 +149,11 @@ export function HomePage() {
   ];
 
   const timelineMilestones = [
-    { id:'frontier', year:'2015', title:'Frontier', summary:'主网启动，账户模型与 EVM 执行语义确立。', detail:'内容聚焦：账户/nonce/gas 基础，初代执行语义。', link:'/curriculum#el-core' },
-    { id:'istanbul', year:'2017-2019', title:'Byzantium / Istanbul', summary:'预编译、Gas 计价与 opcode 安全边界持续演化。', detail:'内容聚焦：opcode repricing、预编译、硬分叉治理。', link:'/curriculum#eip-workflow-core' },
-    { id:'merge', year:'2022', title:'The Merge', summary:'PoS 接管，共识层与执行层正式分工协作。', detail:'内容聚焦：EL-CL 分层、验证者经济与 finality。', link:'/curriculum#cl-core' },
-    { id:'rollup', year:'2024+', title:'Rollup-centric', summary:'EIP-4844 带来 blob DA 经济窗口，L2 成本结构重塑。', detail:'内容聚焦：blob DA、batch economics、L2 吞吐。', link:'/curriculum#eip4844-da-economics-deep' },
-    { id:'future', year:'Next', title:'Future Upgrades', summary:'Verkle / Stateless / PBS 持续推进，长期扩展性为核心目标。', detail:'内容聚焦：state witness、PBS 分工、抗审查路径。', link:'/curriculum#verkle-stateless-deep' }
+    { id:'frontier', year:'2015', title:'Frontier', summary:'主网启动，账户模型与 EVM 执行语义确立。', detail:'内容聚焦：账户/nonce/gas 基础，初代执行语义。', link:'https://forkcast.org/upgrades?focus=frontier' },
+    { id:'istanbul', year:'2017-2019', title:'Byzantium / Istanbul', summary:'预编译、Gas 计价与 opcode 安全边界持续演化。', detail:'内容聚焦：opcode repricing、预编译、硬分叉治理。', link:'https://forkcast.org/upgrades?focus=byzantium-istanbul' },
+    { id:'merge', year:'2022', title:'The Merge', summary:'PoS 接管，共识层与执行层正式分工协作。', detail:'内容聚焦：EL-CL 分层、验证者经济与 finality。', link:'https://forkcast.org/upgrades?focus=merge' },
+    { id:'rollup', year:'2024+', title:'Rollup-centric', summary:'EIP-4844 带来 blob DA 经济窗口，L2 成本结构重塑。', detail:'内容聚焦：blob DA、batch economics、L2 吞吐。', link:'https://forkcast.org/upgrades?focus=rollup-centric' },
+    { id:'future', year:'Next', title:'Future Upgrades', summary:'Verkle / Stateless / PBS 持续推进，长期扩展性为核心目标。', detail:'内容聚焦：state witness、PBS 分工、抗审查路径。', link:'https://forkcast.org/upgrades?focus=future' }
   ];
   const [activeMilestone, setActiveMilestone] = useState(timelineMilestones[2]);
 
@@ -266,7 +266,7 @@ export function HomePage() {
       <section className="card card-hover garden-section garden-shell">
         <div className="card-title-row">
           <h3 className="section-title" style={{ margin: 0 }}>协议演化时间轴</h3>
-          <span className="meta-pill">Protocol Evolution</span>
+          <span className="meta-pill">Protocol Evolution · Forkcast Jump</span>
         </div>
         <div className="protocol-timeline" style={{ marginTop: 10 }}>
           {timelineMilestones.map((m) => (
@@ -280,7 +280,7 @@ export function HomePage() {
         <div className="callout insight" style={{ marginTop: 10 }}>
           <strong>{activeMilestone.title} · 深入内容</strong>
           <p className="subtle" style={{ margin: '6px 0' }}>{activeMilestone.detail}</p>
-          <Link className="btn btn-ghost" to={activeMilestone.link}>查看对应升级内容</Link>
+          <a className="btn btn-ghost" href={activeMilestone.link} target="_blank" rel="noreferrer">前往 Forkcast 查看升级详情</a>
         </div>
       </section>
 
