@@ -1,0 +1,1 @@
+export default function Page(){return <main><h2>watchlist</h2><p>placeholder</p></main>}

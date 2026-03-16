@@ -1,0 +1,1 @@
+export default function Page(){return <main><h2>meeting/[id]</h2><p>placeholder</p></main>}

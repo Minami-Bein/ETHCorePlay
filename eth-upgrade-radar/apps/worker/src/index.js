@@ -1,0 +1,1 @@
+console.log('worker skeleton: ingestion/normalize/score queues');

@@ -1,0 +1,1 @@
+export default function Page(){return <main><h1>Eth Upgrade Radar</h1><ul><li>Dashboard</li><li>Upgrade Detail</li><li>EIP Detail</li><li>Meeting</li><li>Search</li><li>Watchlist / Alerts</li></ul></main>}

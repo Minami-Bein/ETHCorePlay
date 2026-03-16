@@ -1,0 +1,10 @@
+const express=require('express');
+const app=express();
+app.get('/api/health',(_,res)=>res.json({ok:true}));
+app.get('/api/upgrades',(_,res)=>res.json([{slug:'fusaka',status:'scoping'}]));
+app.get('/api/eips/:number',(req,res)=>res.json({number:req.params.number,title:'placeholder'}));
+app.get('/api/meetings',(_,res)=>res.json([]));
+app.get('/api/events',(_,res)=>res.json([]));
+app.get('/api/search',(req,res)=>res.json({q:req.query.q||'',results:[]}));
+app.get('/api/subscriptions',(_,res)=>res.json([]));
+app.listen(4000,()=>console.log('api on :4000'));
