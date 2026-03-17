@@ -13,10 +13,27 @@ function blockers(events: any[]) {
   return events.filter((e) => /block|issue|halt|fail|controvers/i.test(`${e.title} ${e.summary || ''}`)).slice(0, 8);
 }
 
+function typeDist(events: any[]) {
+  const m: Record<string, number> = {};
+  for (const e of events) m[e.type] = (m[e.type] || 0) + 1;
+  return Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,8);
+}
+
+function dayTrend(events: any[]) {
+  const m: Record<string, number> = {};
+  for (const e of events) {
+    const d = e.occurredAt ? new Date(e.occurredAt).toISOString().slice(0,10) : 'unknown';
+    m[d] = (m[d] || 0) + 1;
+  }
+  return Object.entries(m).sort((a,b)=>a[0].localeCompare(b[0])).slice(-10);
+}
+
 export default async function Page({ params }: any) {
   const { upgrade, timeline } = await getUpgrade(params.slug);
   const events = timeline?.events || [];
   const bl = blockers(events);
+  const dist = typeDist(events);
+  const trend = dayTrend(events);
 
   return (
     <main className="container">
@@ -34,6 +51,14 @@ export default async function Page({ params }: any) {
       )}
 
       <section className="grid grid-2" style={{ marginTop: 12 }}>
+        <article className="card">
+          <h3>Type Distribution</h3>
+          <ul className="list">{dist.map(([k,v]) => <li key={k}><span className="chip">{k}</span> <span style={{ display:'inline-block', width: `${Math.min(100, v*8)}px`, height: 8, background: 'var(--pri)', borderRadius: 8, margin:'0 8px' }} /> {v}</li>)}</ul>
+        </article>
+        <article className="card">
+          <h3>Daily Trend (10d)</h3>
+          <ul className="list">{trend.map(([d,v]) => <li key={d}><small>{d}</small> <span style={{ display:'inline-block', width: `${Math.min(120, v*12)}px`, height: 8, background: 'var(--cyan)', borderRadius: 8, margin:'0 8px' }} /> {v}</li>)}</ul>
+        </article>
         <article className="card">
           <h3>Signals</h3>
           <pre>{JSON.stringify(timeline?.stats || {}, null, 2)}</pre>
