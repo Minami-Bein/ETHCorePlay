@@ -16,8 +16,8 @@ if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
   exit 1
 fi
 
+export ANTHROPIC_BASE_URL="${ANTHROPIC_BASE_URL:-https://api.anthropic.com}"
 export ANTHROPIC_MODEL="${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}"
 
-# 进入 workspace 根目录运行
 cd /Users/Zhuanz/.openclaw/workspace
 exec /Users/Zhuanz/.openclaw/.npm-global/bin/claude "$@"
