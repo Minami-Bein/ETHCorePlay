@@ -682,9 +682,9 @@ li { margin-bottom: 8px; }
   border-color: var(--primary-light);
 }
 
-/* Keep quiz controls as actual radio/checkbox icons instead of stretched inputs. */
-.quiz-item .option input[type="radio"],
-.quiz-item .option input[type="checkbox"] {
+/* Keep option controls as actual radio/checkbox icons instead of stretched inputs. */
+.option input[type="radio"],
+.option input[type="checkbox"] {
   width: 16px;
   height: 16px;
   min-width: 16px;
@@ -694,7 +694,7 @@ li { margin-bottom: 8px; }
   box-sizing: border-box;
 }
 
-.quiz-item .option input[type="radio"] {
+.option input[type="radio"] {
   appearance: auto;
   -webkit-appearance: radio;
   display: block;
@@ -704,11 +704,11 @@ li { margin-bottom: 8px; }
   accent-color: var(--primary);
 }
 
-.quiz-item .option input[type="radio"]::before {
+.option input[type="radio"]::before {
   content: none;
 }
 
-.quiz-item .option input[type="checkbox"] {
+.option input[type="checkbox"] {
   border-radius: 6px;
 }
 

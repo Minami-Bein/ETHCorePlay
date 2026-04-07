@@ -851,7 +851,7 @@ export function CurriculumPage() {
                   <div key={q.id} style={{ marginTop: 8 }}>
                     <div>{q.prompt}</div>
                     {q.options.map((opt, oi) => (
-                      <label key={opt} style={{ display: 'block' }}>
+                      <label key={opt} className="option">
                         <input
                           type="radio"
                           name={q.id}
