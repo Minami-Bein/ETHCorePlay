@@ -898,10 +898,12 @@ export function CurriculumPage() {
               <ul>
                 {(chapterChecklists.find((x) => x.chapterId === chapter.id)?.items || ['阅读本章','完成测评','完成1个练习']).map((item, i) => (
                   <li key={item}>
-                    <label style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
+                    <label className="checklist-option" style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
                       <input
+                        className="checklist-box"
                         type="checkbox"
                         checked={!!(checklistState[chapter.id] || {})[i]}
+                        disabled
                         onChange={() => toggleChecklist(chapter.id, i)}
                       />
                       {item}

@@ -718,6 +718,52 @@ input[type="radio"], input[type="checkbox"] {
   height: 16px;
 }
 
+.checklist-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.35;
+  cursor: default;
+}
+
+.checklist-box {
+  appearance: auto !important;
+  -webkit-appearance: checkbox !important;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  flex: 0 0 20px;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  vertical-align: middle;
+  position: static;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  box-sizing: border-box;
+  cursor: default;
+  accent-color: var(--primary);
+  transform: scale(1.25);
+  transform-origin: left center;
+  transition: none;
+}
+
+.checklist-box::before {
+  content: none !important;
+}
+
+.checklist-box:checked {
+  background: transparent !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+}
+
+.checklist-box:checked::before {
+  content: none !important;
+}
+
 input[type="text"] {
   width: 100%;
   padding: 12px 16px;
